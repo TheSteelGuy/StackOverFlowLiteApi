@@ -71,7 +71,7 @@ https://infinite-dusk-68356.herokuapp.com/
     ```
 ### if you want to test other enviroments type:
     ```
-    (myenv)$ export CONFIG_ENVIROMENT=production **to run *under produnction environment**
+    (myenv)$ export CONFIG_ENVIRONMENT=production **to run *under produnction environment**
     ```
 
 #### **Run the app**
