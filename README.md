@@ -1,7 +1,10 @@
+[![Build Status](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi.svg?branch=159714040-ch2-testcases)](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi)
+[![Coverage Status](https://coveralls.io/repos/github/TheSteelGuy/StackOverFlowLiteApi/badge.svg?branch=159714040-ch2-testcases)](https://coveralls.io/github/TheSteelGuy/StackOverFlowLiteApi?branch=159714040-ch2-testcases)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c9337d2239165a70a7db/maintainability)](https://codeclimate.com/github/TheSteelGuy/StackOverFlowLiteApi/maintainability)
 # StackOverFlowLiteApi
 
 ## Introduction
-* An API for the StackOverFLow hosted  **[```here:```](https://thesteelguy.github.io/StackOverFowLite/)**). front end app.
+* StackOverFLowApi is An API for the StackOverFLow hosted front end up  **[```here```](https://thesteelguy.github.io/StackOverFowLite/)**).
 * StackOverFLowLite a platform where people can ask questions and provide answers. .
 ## NB
 The app purely uses python data structures hence no persistance, however another version will be available fro data persistance
@@ -71,7 +74,7 @@ The app purely uses python data structures hence no persistance, however another
     ```
 ### **if you want to test other enviroments type:**
     ```
-    (myenv)$ export CONFIG_ENVIROMENT=production **to run *under produnction environment**
+    (myenv)$ export CONFIG_ENVIROMENT=production to run *under produnction environment
     ```
 
 #### **Run the app**

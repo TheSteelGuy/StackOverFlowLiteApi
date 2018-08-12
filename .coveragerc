@@ -8,4 +8,4 @@ omit =
 omit =
     app/error.py
     venv/*
-*/python?.?/*
+    */python?.?/*
