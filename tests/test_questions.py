@@ -32,18 +32,13 @@ class TestQuestion(Testbase):
         ''' help post a question for a testcase that needs it'''
         res = self.client.post(
             'api/v1/questions',
-            data=json.dumps(self.question,
+            data=json.dumps(self.question),
             content_type='application/json')
-        )
         return res
 
     def test_ask_question(self):
         '''test if question can be asked'''
-        quiz = self.client.post(
-            'api/v1/questions',
-            data=json.dumps(self.question),
-            content_type='application/json'
-        )
+        quiz = self.help_ask_question()
         self.assertEqual(quiz.status_code,201)
     
     def test_fetch_questions(self):
@@ -77,23 +72,23 @@ class TestQuestion(Testbase):
 
     def test_ask_question_with_no_title(self):
         '''tests to see wether posting question with no title is possible'''
-        quiz = self.client.post(
+        quiz=self.client.post(
             '/api/v1/questions',
-            data=json.dumps(self.question),
+            data=json.dumps({'title':'','body':'is james alive?'}),
             content_type='application/json'
         )
         res = json.loads(quiz.data.decode())
-        self.assertTrue(res['message']=='Provide question a title')
+        self.assertEqual(res['message'],'Provide question title, or check for spelling errors')
 
     def test_ask_question_with_no_body(self):
         '''tests to see wether posting question with no body is possible'''
-        quiz = self.client.post(
+        quiz=self.client.post(
             '/api/v1/questions',
-            data=json.dumps(self.question),
+            data=json.dumps({'title':'is james alive?','body':''}),
             content_type='application/json'
         )
         res = json.loads(quiz.data.decode())
-        self.assertTrue(res['message']=='Provide question body')
+        self.assertTrue(res['message'] =='Provide question description')
 
 
 if __name__ == '__main__':

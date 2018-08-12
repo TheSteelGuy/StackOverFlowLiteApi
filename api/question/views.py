@@ -18,9 +18,9 @@ class AskQuestion(MethodView):
         quiz_title = request.json.get('title')
         quiz_body = request.json.get('body')
         if not quiz_title:
-            return make_response(jsonify({'mesage': 'Provide question title, or check for spelling errors'})), 400
+            return make_response(jsonify({'message': 'Provide question title, or check for spelling errors'})), 400
         if not quiz_body:
-            return make_response(jsonify({'message': 'Provide question description'}))
+            return make_response(jsonify({'message': 'Provide question description'})), 409
         if does_object_exist(questions, 'title', quiz_title):
             return make_response(jsonify(
                 {'message': 'You have asked this question before'})), 409

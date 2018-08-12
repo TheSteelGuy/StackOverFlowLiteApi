@@ -5,6 +5,7 @@ from flask_testing import TestCase
 from flask import request
 from api import create_app
 from api.answer.views import answers
+from api.question.views import questions
 
 
 class Testbase(TestCase):
@@ -18,16 +19,17 @@ class Testbase(TestCase):
         self.client = self.app.test_client()
         self.question = {
             'title': 'what is AJAX',
-            'body': 'i am a newbie in js...'
+            'body': 'i am a newbie in js in this'
 
         }
         self.answer ={
-            'body':'ajax is an old tech which...'
+            'answer':'ajax is an old tech which...'
         }
 
     def tearDown(self):
         '''clear list data for every test case to be atomic'''
         del answers[:]
+        del questions[:]
     
 class TestAnswer(Testbase):
     '''tests question related actions'''
