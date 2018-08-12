@@ -70,11 +70,11 @@ The app purely uses python data structures hence no persistance, however another
     ```
  #### **Enviroment variables.**
     ```
-    by default if you dont pass any ENV VAR, the sever runs with development configarations
+    by default if you dont pass any this the sever runs as development
     ```
-### **if you want to test other enviroments type:**
+### if you want to test other enviroments type:
     ```
-    (myenv)$ export CONFIG_ENVIROMENT=production to run *under produnction environment
+    (myenv)$ export CONFIG_ENVIRONMENT=production **to run *under produnction environment**
     ```
 
 #### **Run the app**
