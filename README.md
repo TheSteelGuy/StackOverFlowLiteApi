@@ -11,7 +11,7 @@ The app purely uses python data structures hence no persistance, however another
 * **[Flask](flask.pocoo.org/)**  
 
 ## Link to heroku:
-https://infinite-dusk-68356.herokuapp.com/
+
 ## Current endpoints(More to follow)
 
 * #### Ask a question.
@@ -33,7 +33,7 @@ https://infinite-dusk-68356.herokuapp.com/
 
 
 * #### Fetch a specific question.   
-    `GET /api/v1/questions/<quetionId>` 
+    `GET /api/v1/questions/<questionId>` 
     ```
     headers = {content_type:application/json} 
     ```
@@ -45,7 +45,7 @@ https://infinite-dusk-68356.herokuapp.com/
     headers = {content_type:application/json}
 
     {
-        "answe": "answer description"
+        "answer": "answer description"
     }
     ```
 
@@ -67,9 +67,9 @@ https://infinite-dusk-68356.herokuapp.com/
     ```
  #### **Enviroment variables.**
     ```
-    by default if you dont pass any this the sever runs as development
+    by default if you dont pass any ENV VAR, the sever runs with development configarations
     ```
-### if you want to test other enviroments type:
+### **if you want to test other enviroments type:**
     ```
     (myenv)$ export CONFIG_ENVIROMENT=production **to run *under produnction environment**
     ```
