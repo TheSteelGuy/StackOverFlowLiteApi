@@ -41,6 +41,18 @@ class AskQuestion(MethodView):
             return make_response(jsonify({'message': 'There are no questions available'})), 404
         return make_response(jsonify({'questions': questions})), 200
 
+    def delete(self, questionId):
+        '''delete question'''
+        quiz = does_object_exist(questions,'questionId', int(questionId))
+        if quiz:
+            questions.remove(quiz[0])
+            return make_response(jsonify(
+                {'message': 'Question deleted succefully'}
+            )), 200
+        return make_response(jsonify(
+            {'message': 'You must have deleted the question already, it doesnt exist'}
+        )), 404
+
 
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
@@ -59,3 +71,5 @@ question_blueprint.add_url_rule(
     '/questions', view_func=AskQuestion.as_view('fetch-questions'), methods=['GET'])
 question_blueprint.add_url_rule(
     '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET'])
+question_blueprint.add_url_rule(
+    '/questions/<questionId>/delete', view_func=AskQuestion.as_view('delete-question'), methods=['DELETE'])

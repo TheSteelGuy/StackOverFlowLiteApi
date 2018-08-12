@@ -49,6 +49,13 @@ https://infinite-dusk-68356.herokuapp.com/
     }
     ```
 
+* #### Delete a question.
+    `DELETE /api/v1/questions/questionId/delete`:
+    ```
+    headers = {content_type:application/json}
+
+    ```
+
 
 ## Installation guide and usage
 
