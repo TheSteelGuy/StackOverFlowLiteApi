@@ -68,7 +68,7 @@ class TestQuestion(Testbase):
         )
         self.assertEqual(question.status_code, 200)
         res = json.loads(question.data.decode())
-        self.asserTrue(res['title']=='what is AJAX')
+        self.assertEqual(res['question']['title'],'what is AJAX')
 
     def test_ask_question_with_no_title(self):
         '''tests to see wether posting question with no title is possible'''
