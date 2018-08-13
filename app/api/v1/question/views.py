@@ -1,8 +1,8 @@
 '''question views '''
 from flask import make_response, jsonify, request, Blueprint
 from flask.views import MethodView
-from api.models.question import Question
-from api.common.validators import does_object_exist, question_quality
+from api.v1.question.question import Question
+from api.v1.common.validators import does_object_exist, question_quality
 
 
 question_blueprint = Blueprint('question', __name__)

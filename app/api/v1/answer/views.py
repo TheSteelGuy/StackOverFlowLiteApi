@@ -1,9 +1,9 @@
 from datetime import datetime
 from flask import Blueprint, request, jsonify, make_response
 from flask.views import MethodView
-from api.models.answer import Answer
-from api.common.validators import does_object_exist, content_quality
-from api.question.views import questions
+from api.v1.answer.answer import Answer
+from api.v1.common.validators import does_object_exist, content_quality
+from api.v1.question.views import questions
 
 answer_blueprint = Blueprint('answer', __name__)
 

@@ -4,9 +4,9 @@ main config  file
 '''
 
 from flask_api import FlaskAPI
-from api.config import CONFIG
-from api.answer.views import answer_blueprint
-from api.question.views import question_blueprint
+from api.v1.config import CONFIG
+from api.v1.answer.views import answer_blueprint
+from api.v1.question.views import question_blueprint
 
 
 def create_app(config):

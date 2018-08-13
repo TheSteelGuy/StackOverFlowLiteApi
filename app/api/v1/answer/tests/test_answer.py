@@ -3,9 +3,9 @@ import unittest
 import json
 from flask_testing import TestCase
 from flask import request
-from api import create_app
-from api.answer.views import answers
-from api.question.views import questions
+from api.v1 import create_app
+from api.v1.answer.views import answers
+from api.v1.question.views import questions
 
 
 class Testbase(TestCase):
