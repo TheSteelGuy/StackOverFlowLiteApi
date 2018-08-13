@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify, make_response
 from flask.views import MethodView
 from api.models.answer import Answer
@@ -10,7 +11,7 @@ answers = list()
 
 
 class AnswerQuestion(MethodView):
-    ''' a class for answering a question'''
+    ''' a class for answer related methods'''
 
     def post(self, questionId):
         ''' method for answering a question'''
@@ -28,7 +29,8 @@ class AnswerQuestion(MethodView):
         for item in answers:
             id_count += 1
         answer = Answer(answer_body)
-        answer_dict = answer.serialize_answer(id_count, questionId)
+        answer_dict = answer.serialize_answer(
+            id_count, questionId, datetime.now())
         answers.append(answer_dict)
         return make_response(jsonify({'message': 'Succesfully answerd the question'})), 201
 
@@ -39,6 +41,20 @@ class AnswerQuestion(MethodView):
             return make_response(jsonify({'message': 'This question has no answers yet'})), 404
         return make_response(jsonify({'answers': answers_list})), 200
 
+    def put(self, questionId, answerId):
+        '''accept an answer as your preffered'''
+        answer_list = does_object_exist(answers, 'answerId', int(answerId))
+        if answer_list:
+            if answer_list[0]['accepted']:
+                return make_response(jsonify({'message':'You have already accepted this answer'})), 409
+            answer_list[0]['accepted'] = True
+            return make_response(jsonify(
+                {'message': 'Succesfully accepted this answer on {}'.format(answer_list[0]['date_accepted'])}
+            )), 200
+        return make_response(jsonify({'message':'The answer you are looking for does not exist'})), 404
+
 
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])
+answer_blueprint.add_url_rule(
+    '/questions/<questionId>/answers/<answerId>', view_func=AnswerQuestion.as_view('accept-answer'), methods=['PUT'])

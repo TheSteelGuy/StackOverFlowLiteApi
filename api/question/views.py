@@ -43,7 +43,7 @@ class AskQuestion(MethodView):
 
     def delete(self, questionId):
         '''delete question'''
-        quiz = does_object_exist(questions,'questionId', int(questionId))
+        quiz = does_object_exist(questions, 'questionId', int(questionId))
         if quiz:
             questions.remove(quiz[0])
             return make_response(jsonify(
@@ -62,7 +62,7 @@ class FetchQuestion(MethodView):
         question = does_object_exist(questions, 'questionId', int(questionId))
         if question:
             return make_response(jsonify({'question': question[0]})), 200
-        return make_response(jsonify({'message':'The question does not exist, seems like it is deleted'}))
+        return make_response(jsonify({'message': 'The question does not exist, seems like it is deleted'}))
 
 
 question_blueprint.add_url_rule(

@@ -22,17 +22,19 @@ class Testbase(TestCase):
             'body': 'i am a newbie in js in this'
 
         }
-        self.answer ={
-            'answer':'ajax is an old tech which...'
+        self.answer = {
+            'answer': 'ajax is an old tech which...'
         }
 
     def tearDown(self):
         '''clear list data for every test case to be atomic'''
         del answers[:]
         del questions[:]
-    
+
+
 class TestAnswer(Testbase):
     '''tests question related actions'''
+
     def ask_question(self):
         ''' help post a question for a testcase that needs it'''
         res = self.client.post(
@@ -47,7 +49,7 @@ class TestAnswer(Testbase):
         quiz = self.ask_question()
         answer = self.client.post(
             'api/v1/questions/1/answers',
-            data = json.dumps(self.answer),
+            data=json.dumps(self.answer),
             content_type='application/json'
         )
         self.assertEqual(answer.status_code, 201)
@@ -56,7 +58,7 @@ class TestAnswer(Testbase):
         quiz = self.ask_question()
         answer = self.client.post(
             'api/v1/questions/1/answers',
-            data=json.dumps({'body':''}),
+            data=json.dumps({'body': ''}),
             content_type='application/json'
         )
 
@@ -64,10 +66,10 @@ class TestAnswer(Testbase):
         quiz = self.ask_question()
         answer = self.client.post(
             'api/v1/questions/1/answers',
-            data=json.dumps({'body':''}),
+            data=json.dumps({'body': ''}),
             content_type='application/json'
         )
-        self.assertIn('Provide an answer',str(answer.data))
+        self.assertIn('Provide an answer', str(answer.data))
 
     def test_fetch_anaswers_for_a_question(self):
         '''check if answers for a question can be retrieved'''
@@ -77,10 +79,19 @@ class TestAnswer(Testbase):
             data=json.dumps(self.answer),
             content_type='application/json'
         )
-        res = self.client.get('api/v1/questions/1/answers',content_type='application/json')
+        res = self.client.get('api/v1/questions/1/answers',
+                              content_type='application/json')
         answer = json.loads(res.data.decode())['answers'][0]['answer']
         self.assertEqual(answer, 'ajax is an old tech which...')
 
+    def test_accept_answer_as_preffered(self):
+        '''tests accept answer'''
+        self.ask_question()
+        self.client.post('/api/v1/questions/1/answers',
+                        data=json.dumps(self.answer), content_type='application/json')
+        accept = self.client.put('/api/v1/questions/1/answers/1', content_type='application/json')
+        self.assertIn('Succesfully accepted this answer', str(accept.data))
+
+
 if __name__ == ('__maain__'):
     unittest.main()
-    
