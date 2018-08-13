@@ -17,8 +17,8 @@ class AnswerQuestion(MethodView):
         answer_body = request.json.get('answer')
         if not answer_body:
             return make_response(jsonify({'mesage': 'Provide an answer'})), 400
-        if not does_object_exist(questions,'questionId',int(questionId)):
-            return make_response(jsonify({'message':'The question does not exist, seems like it is deleted'})), 404
+        if not does_object_exist(questions, 'questionId', int(questionId)):
+            return make_response(jsonify({'message': 'The question does not exist, seems like it is deleted'})), 404
         if does_object_exist(answers, 'answer', answer_body):
             return make_response(jsonify(
                 {'message': 'You cannot give the same answer twice'})), 409
@@ -28,10 +28,17 @@ class AnswerQuestion(MethodView):
         for item in answers:
             id_count += 1
         answer = Answer(answer_body)
-        answer_dict = answer.serialize_answer(id_count)
+        answer_dict = answer.serialize_answer(id_count, questionId)
         answers.append(answer_dict)
-        return make_response(jsonify({'message': 'Succesfully answerd the question'})), 201 
+        return make_response(jsonify({'message': 'Succesfully answerd the question'})), 201
+
+    def get(self, questionId):
+        '''fetch answers for a question'''
+        answers_list = does_object_exist(answers, 'questionId', questionId)
+        if not answers_list:
+            return make_response(jsonify({'message': 'This question has no answers yet'})), 404
+        return make_response(jsonify({'answers': answers_list})), 200
 
 
 answer_blueprint.add_url_rule(
-    '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST'])
+    '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])

@@ -9,11 +9,12 @@ class Answer():
         self.answer_body = answer_body
         self.answer_date = datetime.now()
 
-    def serialize_answer(self, id_count):
+    def serialize_answer(self, id_count, questionId):
         '''take user object and return __dict__ representation'''
         return dict(
             answer=self.answer_body,
             answer_id=id_count,
-            answer_date=self.answer_date
+            answer_date=self.answer_date,
+            questionId=questionId
         )
 

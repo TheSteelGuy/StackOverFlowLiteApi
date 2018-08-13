@@ -67,8 +67,19 @@ class TestAnswer(Testbase):
             data=json.dumps({'body':''}),
             content_type='application/json'
         )
+        self.assertIn('Provide an answer',str(answer.data))
 
-
+    def test_fetch_anaswers_for_a_question(self):
+        '''check if answers for a question can be retrieved'''
+        self.ask_question()
+        self.client.post(
+            '/api/v1/questions/1/answers',
+            data=json.dumps(self.answer),
+            content_type='application/json'
+        )
+        res = self.client.get('api/v1/questions/1/answers',content_type='application/json')
+        answer = json.loads(res.data.decode())['answers'][0]['answer']
+        self.assertEqual(answer, 'ajax is an old tech which...')
 
 if __name__ == ('__maain__'):
     unittest.main()
