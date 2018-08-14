@@ -11,7 +11,7 @@ questions = list()
 
 
 class AskQuestion(MethodView):
-    ''' a class for asking question and fetching all rides'''
+    ''' a class for asking question and fetching questions'''
     @classmethod
     def post(cls):
         ''' method for asking a question'''
