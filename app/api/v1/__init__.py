@@ -7,6 +7,7 @@ from flask_api import FlaskAPI
 from api.v1.config import CONFIG
 from api.v1.answer.views import answer_blueprint
 from api.v1.question.views import question_blueprint
+from api.v1.comment.views import comment_blueprint
 
 
 def create_app(config):
@@ -17,4 +18,5 @@ def create_app(config):
 
     app.register_blueprint(answer_blueprint, url_prefix='/api/v1')
     app.register_blueprint(question_blueprint, url_prefix='/api/v1')
+    app.register_blueprint(comment_blueprint, url_prefix='/api/v1')
     return app
