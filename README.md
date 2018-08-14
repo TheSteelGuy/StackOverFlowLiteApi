@@ -68,13 +68,13 @@ The app purely uses python data structures hence no persistance, however another
     ```
     headers = {content_type:application/json} 
 
-    * ### to downvote replace vote with downvote and upvote to upvote an answer
-    * ## for example to upvote answer send: `GET /api/v1/questions/<questionId>/answers/<answerId>/upvote
+    to downvote replace vote with downvote and upvote to upvote an answer
+    for example to upvote answer send: `GET /api/v1/questions/<questionId>/answers/<answerId>/upvote
     ```
 
 
 * #### Comment on an answer.   
-    `GET /api/v1/questions/<questionId>/answers/<answerId>/<vote>` 
+    `GET /api/v1/questions/<questionId>/answers/<answerId>/comments` 
     ```
     headers = {content_type:application/json} 
 
