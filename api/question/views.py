@@ -9,7 +9,7 @@ questions = list()
 
 
 class AskQuestion(MethodView):
-    ''' a class for asking question and fetching all rides'''
+    ''' a class for asking question and fetching all questions'''
 
     def post(self):
         ''' method for asking a question'''
