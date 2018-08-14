@@ -1,4 +1,4 @@
-'''test question related user action'''
+'''test answer related user action'''
 import unittest
 import json
 from flask_testing import TestCase

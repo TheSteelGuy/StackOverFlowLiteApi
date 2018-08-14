@@ -63,6 +63,10 @@ The app purely uses python data structures hence no persistance, however another
     ```
     headers = {content_type:application/json} 
     ```
+* #### Upvote/Downvote an answer.   
+    `GET /api/v1/questions/<questionId>/answers/<answerId>/<vote>` 
+    ```
+    headers = {content_type:application/json} 
 
 
 ## Installation guide and usage

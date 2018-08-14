@@ -46,15 +46,38 @@ class AnswerQuestion(MethodView):
         answer_list = does_object_exist(answers, 'answerId', int(answerId))
         if answer_list:
             if answer_list[0]['accepted']:
-                return make_response(jsonify({'message':'You have already accepted this answer'})), 409
+                return make_response(jsonify({'message': 'You have already accepted this answer'})), 409
             answer_list[0]['accepted'] = True
             return make_response(jsonify(
-                {'message': 'Succesfully accepted this answer on {}'.format(answer_list[0]['date_accepted'])}
+                {'message': 'Succesfully accepted this answer on {}'.format(
+                    answer_list[0]['date_accepted'])}
             )), 200
-        return make_response(jsonify({'message':'The answer you are looking for does not exist'})), 404
+        return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+
+
+class VoteAnswer(MethodView):
+    ''' class vote'''
+
+    def get(self, questionId, vote, answerId,):
+        ''' upvote or downvote an answer''' 
+        answer_list = does_object_exist(answers, 'answerId', int(answerId))
+        if vote == 'upvote':
+            if answer_list:
+                answer_list[0]['votes'] += 1
+                return make_response(jsonify({'votes':answer_list[0]['votes']})), 200
+            return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+        if vote == 'downvote':
+            if answer_list:
+                answer_list[0]['votes'] -= 1
+                return make_response(jsonify({'votes':answer_list[0]['votes']})), 200
+            return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+        return make_response(jsonify({'message':'You have made an invalid choice,key pass upvote or downvote'})), 409
+
 
 
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])
 answer_blueprint.add_url_rule(
-    '/questions/<questionId>/answers/<answerId>', view_func=AnswerQuestion.as_view('accept-answer'), methods=['PUT'])
+    '/questions/<questionId>/answers/<answerId>', view_func=AnswerQuestion.as_view('accept-answer'), methods=['PUT', 'GET'])
+answer_blueprint.add_url_rule(
+    '/questions/<questionId>/answers/<answerId>/<vote>',view_func=VoteAnswer.as_view('vote-answer'), methods=['GET'])

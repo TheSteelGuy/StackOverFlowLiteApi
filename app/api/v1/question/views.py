@@ -56,7 +56,6 @@ class AskQuestion(MethodView):
 
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
-
     def get(self, questionId):
         ''' a method for fetching a single question'''
         question = does_object_exist(questions, 'questionId', int(questionId))
