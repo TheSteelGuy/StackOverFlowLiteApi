@@ -14,7 +14,7 @@ The app purely uses python data structures hence no persistance, however another
 * **[Flask](flask.pocoo.org/)**  
 
 ## Link to heroku:
-https://infinite-dusk-68356.herokuapp.com/
+
 ## Current endpoints(More to follow)
 
 * #### Ask a question.
@@ -36,7 +36,7 @@ https://infinite-dusk-68356.herokuapp.com/
 
 
 * #### Fetch a specific question.   
-    `GET /api/v1/questions/<quetionId>` 
+    `GET /api/v1/questions/<questionId>` 
     ```
     headers = {content_type:application/json} 
     ```
