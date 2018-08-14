@@ -88,8 +88,9 @@ class TestAnswer(Testbase):
         '''tests accept answer'''
         self.ask_question()
         self.client.post('/api/v1/questions/1/answers',
-                        data=json.dumps(self.answer), content_type='application/json')
-        accept = self.client.put('/api/v1/questions/1/answers/1', content_type='application/json')
+                         data=json.dumps(self.answer), content_type='application/json')
+        accept = self.client.put(
+            '/api/v1/questions/1/answers/1', content_type='application/json')
         self.assertIn('Succesfully accepted this answer', str(accept.data))
 
 

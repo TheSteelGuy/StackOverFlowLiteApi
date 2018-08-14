@@ -12,8 +12,8 @@ questions = list()
 
 class AskQuestion(MethodView):
     ''' a class for asking question and fetching all rides'''
-
-    def post(self):
+    @classmethod
+    def post(cls):
         ''' method for asking a question'''
         quiz_title = request.json.get('title')
         quiz_body = request.json.get('body')
@@ -35,13 +35,15 @@ class AskQuestion(MethodView):
         questions.append(quiz_dict)
         return make_response(jsonify({'message': 'Succesfully asked a question'})), 201
 
-    def get(self):
+    @classmethod
+    def get(cls):
         ''' a method  for fetching all questions'''
         if not questions:
             return make_response(jsonify({'message': 'There are no questions available'})), 404
         return make_response(jsonify({'questions': questions})), 200
 
-    def delete(self, questionId):
+    @classmethod
+    def delete(cls, questionId):
         '''delete question'''
         quiz = does_object_exist(questions, 'questionId', int(questionId))
         if quiz:
@@ -56,7 +58,8 @@ class AskQuestion(MethodView):
 
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
-    def get(self, questionId):
+    @classmethod
+    def get(cls, questionId):
         ''' a method for fetching a single question'''
         question = does_object_exist(questions, 'questionId', int(questionId))
         if question:

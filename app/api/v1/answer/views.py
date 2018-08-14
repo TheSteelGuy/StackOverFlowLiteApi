@@ -12,8 +12,8 @@ answers = list()
 
 class AnswerQuestion(MethodView):
     ''' a class for answer related methods'''
-
-    def post(self, questionId):
+    @classmethod
+    def post(cls, questionId):
         ''' method for answering a question'''
         answer_body = request.json.get('answer')
         if not answer_body:
@@ -34,14 +34,16 @@ class AnswerQuestion(MethodView):
         answers.append(answer_dict)
         return make_response(jsonify({'message': 'Succesfully answerd the question'})), 201
 
-    def get(self, questionId):
+    @classmethod
+    def get(cls, questionId):
         '''fetch answers for a question'''
         answers_list = does_object_exist(answers, 'questionId', questionId)
         if not answers_list:
             return make_response(jsonify({'message': 'This question has no answers yet'})), 404
         return make_response(jsonify({'answers': answers_list})), 200
 
-    def put(self, questionId, answerId):
+    @classmethod
+    def put(cls, questionId, answerId):
         '''accept an answer as your preffered'''
         answer_list = does_object_exist(answers, 'answerId', int(answerId))
         if answer_list:
@@ -57,22 +59,21 @@ class AnswerQuestion(MethodView):
 
 class VoteAnswer(MethodView):
     ''' class vote'''
-
-    def get(self, questionId, vote, answerId,):
-        ''' upvote or downvote an answer''' 
+    @classmethod
+    def get(cls, questionId, vote, answerId,):
+        ''' upvote or downvote an answer'''
         answer_list = does_object_exist(answers, 'answerId', int(answerId))
         if vote == 'upvote':
             if answer_list:
                 answer_list[0]['votes'] += 1
-                return make_response(jsonify({'votes':answer_list[0]['votes']})), 200
+                return make_response(jsonify({'votes': answer_list[0]['votes']})), 200
             return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
         if vote == 'downvote':
             if answer_list:
                 answer_list[0]['votes'] -= 1
-                return make_response(jsonify({'votes':answer_list[0]['votes']})), 200
+                return make_response(jsonify({'votes': answer_list[0]['votes']})), 200
             return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
-        return make_response(jsonify({'message':'You have made an invalid choice,key pass upvote or downvote'})), 409
-
+        return make_response(jsonify({'message': 'You have made an invalid choice,key pass upvote or downvote'})), 409
 
 
 answer_blueprint.add_url_rule(
@@ -80,4 +81,4 @@ answer_blueprint.add_url_rule(
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers/<answerId>', view_func=AnswerQuestion.as_view('accept-answer'), methods=['PUT', 'GET'])
 answer_blueprint.add_url_rule(
-    '/questions/<questionId>/answers/<answerId>/<vote>',view_func=VoteAnswer.as_view('vote-answer'), methods=['GET'])
+    '/questions/<questionId>/answers/<answerId>/<vote>', view_func=VoteAnswer.as_view('vote-answer'), methods=['GET'])
