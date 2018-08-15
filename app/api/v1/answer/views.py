@@ -73,7 +73,7 @@ class VoteAnswer(MethodView):
                 answer_list[0]['votes'] -= 1
                 return make_response(jsonify({'votes': answer_list[0]['votes']})), 200
             return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
-        return make_response(jsonify({'message': 'You have made an invalid choice,key pass upvote or downvote'})), 409
+        return make_response(jsonify({'message': 'You have made an invalid choice,upvote or downvote'})), 409
 
 
 answer_blueprint.add_url_rule(
