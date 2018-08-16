@@ -1,4 +1,4 @@
-'''test question related user action'''
+'''test comment related user action'''
 import unittest
 import json
 from flask_testing import TestCase
@@ -32,7 +32,7 @@ class Testbase(TestCase):
         }
 
     def tearDown(self):
-        '''make the questions list empty after each test case'''
+        '''empty lists'''
         del comments[:]
         del questions[:]
         del answers[:]

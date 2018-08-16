@@ -33,7 +33,7 @@ class Testbase(TestCase):
 
 
 class TestAnswer(Testbase):
-    '''tests question related actions'''
+    '''tests answer related actions'''
 
     def ask_question(self):
         ''' help post a question for a testcase that needs it'''
