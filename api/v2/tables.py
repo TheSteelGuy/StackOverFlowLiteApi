@@ -13,6 +13,7 @@ def create():
                 qid SERIAL PRIMARY KEY,\
                 title VARCHAR(55),\
                 body VARCHAR(255),\
+                post_date TIMESTAMP,\
                 authorId INTEGER REFERENCES users (userId) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS answers (\
