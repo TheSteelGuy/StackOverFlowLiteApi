@@ -10,7 +10,7 @@
 The app purely uses python data structures hence no persistance, however another version will be available fro data persistance
 
 ## Technologies used & needed.
-* **[Python2](https://www.python.org/downloads/)**).
+* **[Python](https://www.python.org/downloads/)**).
 * **[Flask](flask.pocoo.org/)**  
 
 ## Link to heroku:
@@ -115,5 +115,5 @@ The app purely uses python data structures hence no persistance, however another
    ```
 #### **Run Tests**
   ```
-  (myenv)$ pytest --cov=tests
+  (myenv)$ pytest --cov=api
   ```
