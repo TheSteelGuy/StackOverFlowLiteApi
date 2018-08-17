@@ -44,7 +44,7 @@ class TestQuestion(Testbase):
         self.assertEqual(quiz.status_code, 201)
 
     def test_fetch_questions(self):
-        '''test if questions can be fetched'''
+        '''test if rides can be fetched'''
         self.help_ask_question()
         questions = self.client.get(
             'api/v1/questions',
