@@ -75,7 +75,7 @@ The app purely uses python data structures hence no persistance, however another
 
 
 * #### Comment on an answer.   
-    `GET /api/v1/questions/<questionId>/answers/<answerId>/comments` 
+    `POST /api/v1/questions/<questionId>/answers/<answerId>/comments` 
     ```
     headers = {content_type:application/json} 
 
