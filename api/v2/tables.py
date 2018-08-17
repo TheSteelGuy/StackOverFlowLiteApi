@@ -19,7 +19,7 @@ def create():
         'CREATE TABLE IF NOT EXISTS answers (\
                 aId SERIAL PRIMARY KEY,\
                 description VARCHAR(250),\
-                votes INT,\
+                votes INT DEFAULT 0,\
                 accepted BOOLEAN DEFAULT false,\
                 answer_date TIMESTAMP,\
                 questionId INTEGER REFERENCES questions (qId) ON DELETE CASCADE\
