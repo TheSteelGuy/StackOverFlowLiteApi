@@ -4,7 +4,7 @@ application entry point
 """
 import os
 
-from app.api.v1 import create_app
+from api.v1 import create_app
 try:
     config = os.environ['CONFIG_ENVIRONMENT']
     app = create_app(config)
