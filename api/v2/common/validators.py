@@ -14,15 +14,6 @@ def does_object_exist(column=None, table=None, col_name=None, param=None):
     return False
 
 
-def select_all(table, column, param):
-    query = 'SELECT * FROM {} WHERE {} =%s'.format(table, column)
-    cursor.execute(query, param)
-    list_ = cursor.fetchall()
-    if list_:
-        return list_
-    return False
-
-
 def question_quality(string1="", string2=""):
     '''check the quality of questions sent to the platform'''
     if len(string1.strip()) < 10:
