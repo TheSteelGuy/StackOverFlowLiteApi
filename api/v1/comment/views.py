@@ -23,6 +23,8 @@ class MyComment(MethodView):
             return make_response(jsonify({'message':'Question with that id does not exist'})), 404
         if not answer:
             return make_response(jsonify({'message':'Answer with that id does not exist'})), 404
+        if not request.get_json():
+            return make_response(jsonify({'message':'Invalid request format, provide json request'})), 400
         comment_body = request.json.get('comment')
         if not comment_body:
             return make_response(jsonify({'message': 'Provide comment description'})), 400
