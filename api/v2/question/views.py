@@ -2,7 +2,7 @@
 from flask import make_response, jsonify, request, Blueprint
 from flask.views import MethodView
 from api.v2.question.question import Question
-from api.v2.common.validators import does_object_exist, question_quality
+from api.v2.common.validators import does_object_exist, question_quality, db_ptimizer, does_list_exist
 from api.v2.common.SQL import select_no_condition, select_all
 
 
@@ -43,17 +43,18 @@ class FetchQuestion(MethodView):
     @classmethod
     def get(cls, questionId):
         ''' a method for fetching a single question'''
-        question = select_all('questions', 'qId', questionId)
-        answers = select_all('answers', 'questionId', questionId)
-        if question:
-            if answers:
+        QA = db_ptimizer()
+        if QA:
+            question = does_list_exist(QA,'qid', int(questionId))
+            if not question:
                 return make_response(jsonify(
-                    {'question': question[0],'answes':answers}
-                )), 200
-            return make_response(jsonify({'question':question[0], 'answers':'This  question has no answers'})), 200
-        return make_response(jsonify({'message': 'The question does not exist, seems like it is deleted'}))
+                    {'message': 'The question does not exist, seems like it is deleted'})), 200
+            return make_response(jsonify({'question':question})), 200
+        return make_response(jsonify({'message':'Something went wrong, question could not be fetched'})), 500
 
 question_blueprint.add_url_rule(
     '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET'])
 question_blueprint.add_url_rule(
     '/questions', view_func=Questions.as_view('questions'), methods=['POST','GET'])
+
+
