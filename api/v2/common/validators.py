@@ -1,5 +1,35 @@
 ''' file contains common functions'''
+# third party imports
+from functools import wraps
+from flask import request, jsonify, make_response
 from api.v2 import CONN
+# local imports
+from api.v2.user.user import User
+
+def token_required(func):
+   
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        '''function that fetches token from header and decodes it'''
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return make_response(jsonify(
+                {'message': 'provide a token in the authorization header, please'}
+            )), 403
+        auth_token = auth_header.split("Bearer ")[1]
+        if auth_token:
+            user_id = User.decode_token(auth_token)
+            if not isinstance(user_id, str):
+                user_id = user_id
+            else:
+                response = {
+                    'message' : user_id
+                }
+                return make_response(jsonify(response)), 401
+        else:
+            return False
+        return func(user_id=user_id, *args, **kwargs)
+    return wrapper
 
 cursor = CONN.cursor()
 
@@ -55,3 +85,5 @@ def content_quality(string_, content=None):
         return 'Your {} cannot be numbers only'.format(content)
     if len(string_.split()) < 2:
         return 'Please space your {} properly for readership'.format(content)
+
+
