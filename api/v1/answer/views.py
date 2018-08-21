@@ -15,6 +15,8 @@ class AnswerQuestion(MethodView):
     @classmethod
     def post(cls, questionId):
         ''' method for answering a question'''
+        if not request.get_json():
+            return make_response(jsonify({'message':'Invalid request format, provide json request'})), 400
         answer_body = request.json.get('answer')
         if not answer_body:
             return make_response(jsonify({'mesage': 'Provide an answer'})), 400
