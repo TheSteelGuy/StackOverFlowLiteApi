@@ -1,8 +1,8 @@
 '''question views '''
 from flask import make_response, jsonify, request, Blueprint
 from flask.views import MethodView
-from api.models.question import Question
-from api.common.validators import does_object_exist, question_quality
+from api.v1.question.question import Question
+from api.v1.common.validators import does_object_exist, question_quality
 
 
 question_blueprint = Blueprint('question', __name__)
@@ -11,10 +11,12 @@ questions = list()
 
 
 class AskQuestion(MethodView):
-    ''' a class for asking question and fetching all rides'''
-
-    def post(self):
+    ''' a class for asking question and fetching questions'''
+    @classmethod
+    def post(cls):
         ''' method for asking a question'''
+        if not request.get_json():
+            return make_response(jsonify({'message':'Invalid request format, provide json request'})), 400
         quiz_title = request.json.get('title')
         quiz_body = request.json.get('body')
         if not quiz_title:
@@ -35,13 +37,15 @@ class AskQuestion(MethodView):
         questions.append(quiz_dict)
         return make_response(jsonify({'message': 'Succesfully asked a question'})), 201
 
-    def get(self):
+    @classmethod
+    def get(cls):
         ''' a method  for fetching all questions'''
         if not questions:
             return make_response(jsonify({'message': 'There are no questions available'})), 404
         return make_response(jsonify({'questions': questions})), 200
 
-    def delete(self, questionId):
+    @classmethod
+    def delete(cls, questionId):
         '''delete question'''
         quiz = does_object_exist(questions, 'questionId', int(questionId))
         if quiz:
@@ -56,8 +60,8 @@ class AskQuestion(MethodView):
 
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
-
-    def get(self, questionId):
+    @classmethod
+    def get(cls, questionId):
         ''' a method for fetching a single question'''
         question = does_object_exist(questions, 'questionId', int(questionId))
         if question:

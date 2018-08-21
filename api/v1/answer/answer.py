@@ -16,6 +16,7 @@ class Answer():
             answer=self.answer_body,
             answerId=id_count,
             answer_date=self.answer_date,
+            votes=0,
             accepted=False,
             date_accepted=accpet_date,
             questionId=questionId
