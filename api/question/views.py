@@ -24,7 +24,7 @@ class AskQuestion(MethodView):
         if does_object_exist(questions, 'title', quiz_title):
             return make_response(jsonify(
                 {'message': 'You have asked this question before'})), 409
-        quality_check = question_quality(string1=quiz_title, string2= quiz_body)
+        quality_check = question_quality(string1=quiz_title, string2=quiz_body)
         if quality_check:
             return make_response(jsonify({'message': quality_check})), 409
         id_count = 1
@@ -37,14 +37,32 @@ class AskQuestion(MethodView):
 
     def get(self):
         ''' a method  for fetching all questions'''
-        
+        if not questions:
+            return make_response(jsonify({'message': 'There are no questions available'})), 404
+        return make_response(jsonify({'questions': questions})), 200
+
+    def delete(self, questionId):
+        '''delete question'''
+        quiz = does_object_exist(questions,'questionId', int(questionId))
+        if quiz:
+            questions.remove(quiz[0])
+            return make_response(jsonify(
+                {'message': 'Question deleted succefully'}
+            )), 200
+        return make_response(jsonify(
+            {'message': 'You must have deleted the question already, it doesnt exist'}
+        )), 404
 
 
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
 
-    def get(self):
+    def get(self, questionId):
         ''' a method for fetching a single question'''
+        question = does_object_exist(questions, 'questionId', int(questionId))
+        if question:
+            return make_response(jsonify({'question': question[0]})), 200
+        return make_response(jsonify({'message':'The question does not exist, seems like it is deleted'}))
 
 
 question_blueprint.add_url_rule(
@@ -53,3 +71,5 @@ question_blueprint.add_url_rule(
     '/questions', view_func=AskQuestion.as_view('fetch-questions'), methods=['GET'])
 question_blueprint.add_url_rule(
     '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET'])
+question_blueprint.add_url_rule(
+    '/questions/<questionId>/delete', view_func=AskQuestion.as_view('delete-question'), methods=['DELETE'])

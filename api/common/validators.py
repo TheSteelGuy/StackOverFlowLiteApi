@@ -2,12 +2,12 @@
 
 def does_object_exist(list_, object_key, object_attr):
     ''' find out if an object exist'''
-    object_dict = list(
+    object_list = list(
         filter(
             lambda object_dict: object_dict[object_key] == object_attr,
             list_))
-    if object_dict:
-        return True
+    if object_list:
+        return object_list
     return False
 
 def question_quality(string1="", string2=""):
