@@ -52,6 +52,13 @@ The app purely uses python data structures hence no persistance, however another
     }
     ```
 
+* #### Delete a question.
+    `DELETE /api/v1/questions/questionId/delete`:
+    ```
+    headers = {content_type:application/json}
+
+    ```
+
 
 ## Installation guide and usage
 
