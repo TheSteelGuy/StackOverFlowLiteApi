@@ -10,10 +10,11 @@
 The app purely uses python data structures hence no persistance, however another version will be available fro data persistance
 
 ## Technologies used & needed.
-* **[Python2](https://www.python.org/downloads/)**).
+* **[Python](https://www.python.org/downloads/)**).
 * **[Flask](flask.pocoo.org/)**  
 
 ## Link to heroku:
+* https://stackoverflowlite.herokuapp.com/
 
 ## Current endpoints(More to follow)
 
@@ -68,6 +69,21 @@ The app purely uses python data structures hence no persistance, however another
     ```
     headers = {content_type:application/json} 
 
+    to downvote replace vote with downvote and upvote to upvote an answer
+    for example to upvote answer send: `GET /api/v1/questions/<questionId>/answers/<answerId>/upvote
+    ```
+
+
+* #### Comment on an answer.   
+    `POST /api/v1/questions/<questionId>/answers/<answerId>/comments` 
+    ```
+    headers = {content_type:application/json} 
+
+    {
+        "comment": "comment description here"
+    }
+    ```
+
 
 ## Installation guide and usage
 
@@ -99,5 +115,5 @@ The app purely uses python data structures hence no persistance, however another
    ```
 #### **Run Tests**
   ```
-  (myenv)$ pytest --cov=tests
+  (myenv)$ pytest --cov=api
   ```

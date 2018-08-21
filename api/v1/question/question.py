@@ -1,7 +1,5 @@
 '''question.py'''
 from datetime import datetime
-import re
-
 
 class Question():
     ''' question containing question related operations'''

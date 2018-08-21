@@ -15,6 +15,8 @@ class AnswerQuestion(MethodView):
     @classmethod
     def post(cls, questionId):
         ''' method for answering a question'''
+        if not request.get_json():
+            return make_response(jsonify({'message':'Invalid request format, provide json request'})), 400
         answer_body = request.json.get('answer')
         if not answer_body:
             return make_response(jsonify({'mesage': 'Provide an answer'})), 400
@@ -73,7 +75,7 @@ class VoteAnswer(MethodView):
                 answer_list[0]['votes'] -= 1
                 return make_response(jsonify({'votes': answer_list[0]['votes']})), 200
             return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
-        return make_response(jsonify({'message': 'You have made an invalid choice,key pass upvote or downvote'})), 409
+        return make_response(jsonify({'message': 'You have made an invalid choice,upvote or downvote'})), 409
 
 
 answer_blueprint.add_url_rule(
