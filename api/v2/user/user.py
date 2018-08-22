@@ -6,8 +6,10 @@ from werkzeug.security import generate_password_hash
 from flask import current_app
 from api.v2 import CONN
 
+
 class User():
     ''' class user'''
+
     def __init__(self, username, email, password, confirm_pwd):
         self.username = username
         self.email = email
@@ -40,26 +42,25 @@ class User():
             return 'You should not use numbers only as password'
         return True
 
-
     @staticmethod
     def generate_token(user_id):
         '''method which generates token for users'''
         try:
-             paylod = {
-                 'exp':datetime.utcnow() + timedelta(minutes=1200),
-                 'iat':datetime.utcnow(),
-                 'sub':user_id
+            paylod = {
+                'exp': datetime.utcnow() + timedelta(minutes=1200),
+                'iat': datetime.utcnow(),
+                'sub': user_id
 
-             }
-             encoded_token = jwt.encode(
-                 paylod,current_app.config['SECRET_KEY']
-             )
-             return encoded_token
+            }
+            encoded_token = jwt.encode(
+                paylod, current_app.config['SECRET_KEY']
+            )
+            return encoded_token
 
         except Exception as e:
-                string = 'An exception of type {0} occurred. Arguments:\n{1!r}'
-                message = string.format(type(e).__name__, e.args)
-                return message
+            string = 'An exception of type {0} occurred. Arguments:\n{1!r}'
+            message = string.format(type(e).__name__, e.args)
+            return message
 
     @staticmethod
     def decode_token(token_auth):
@@ -79,6 +80,7 @@ class User():
 
 class BlacklistToken():
     '''blacklist token'''
+
     def __init__(self, token):
         '''contructor for token'''
         self.token = token
@@ -91,17 +93,15 @@ class BlacklistToken():
         '''
         query = 'SELECT token FROM tokens WHERE token =%s'
         cursor = CONN.cursor()
-        cursor.execute(query,(str(auth_token),))
+        cursor.execute(query, (str(auth_token),))
         blacklisted_token = cursor.fetchone()
         if blacklisted_token:
             return True
         return False
 
-    
-    def save_token(self,token):
+    def save_token(self, token):
         ''' saves user in the table'''
         cursor = CONN.cursor()
         query = 'INSERT INTO tokens (token) VALUES (%s)'
-        cursor.execute(query,(token,))
+        cursor.execute(query, (token,))
         CONN.commit()
-

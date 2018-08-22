@@ -46,10 +46,10 @@ class SignUp(MethodView):
             token = user.generate_token(row['userid'])
             return make_response(jsonify(
                 {
-                    'message': 'registration successfull', 'auth_token': token
+                    'message': 'Registration successfull', 'auth_token': token
                 }
             )), 201
-        return make_response(jsonify({'message': 'ensure you have provide all required details'})), 400
+        return make_response(jsonify({'message': 'Ensure you have provide all required details'})), 400
 
 
 class SignIn(MethodView):

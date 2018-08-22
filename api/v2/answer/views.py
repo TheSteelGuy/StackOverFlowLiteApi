@@ -11,7 +11,7 @@ answer_blueprint = Blueprint('answer', __name__)
 class AnswerQuestion(MethodView):
     ''' a class for answer related methods'''
     @classmethod
-    token_required
+    @token_required
     def post(cls, questionId, user_id):
         ''' method for answering a question'''
         answer_body = request.json.get('answer')

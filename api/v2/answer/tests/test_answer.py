@@ -1,81 +1,75 @@
 '''test answer related user action'''
 import unittest
 import json
-from flask_testing import TestCase
-from flask import request
-from api.v2 import create_app
-from api.v2.answer.views import answers
-from api.v2.question.views import questions
-
-
-class Testbase(TestCase):
-    '''test answer super class'''
-
-    def create_app(self):
-        self.app = create_app('testing')
-        return self.app
-
-    def setUp(self):
-        self.client = self.app.test_client()
-        self.question = {
-            'title': 'what is AJAX',
-            'body': 'i am a newbie in js in this'
-
-        }
-        self.answer = {
-            'answer': 'ajax is an old tech which...'
-        }
-
-    def tearDown(self):
-        '''drop tables for test case to be atomic'''
-
-
+from api.v2.common.base_tests import Testbase
 
 class TestAnswer(Testbase):
     '''tests question related actions'''
-
-    def ask_question(self):
-        ''' help post a question for a testcase that needs it'''
+    
+    def test_answer_question(self):
+        '''help answer question'''
+        r = self.client.post(self.SIGNUP_URL, data=json.dumps(
+            self.signup_user), content_type='application/json')
+        data_ = json.loads(r.data.decode())
         res = self.client.post(
             'api/v2/questions',
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
             data=json.dumps(self.question),
-            content_type='application/json'
-        )
-        return res
-
-    def test_answer_question(self):
-        '''test if asking question is possible'''
-        quiz = self.ask_question()
+            content_type='application/json')
+            
         answer = self.client.post(
             'api/v2/questions/1/answers',
             data=json.dumps(self.answer),
-            content_type='application/json'
-        )
-        self.assertEqual(answer.status_code, 201)
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
+            content_type='application/json')
+        assert 'Succesfully answerd the question' in str(answer.data)
+  
 
     def test_answer_question_with_empty_body(self):
-        quiz = self.ask_question()
+        r = self.client.post(self.SIGNUP_URL, data=json.dumps(
+            self.signup_user), content_type='application/json')
+        data_ = json.loads(r.data.decode())
+        res = self.client.post(
+            'api/v2/questions',
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
+            data=json.dumps(self.question),
+            content_type='application/json')
         answer = self.client.post(
             'api/v2/questions/1/answers',
             data=json.dumps({'body': ''}),
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
             content_type='application/json'
         )
+        assert 'Provide an answer' in str(answer.data)
 
-    def test_answer_question_with_empty_body(self):
-        quiz = self.ask_question()
-        answer = self.client.post(
-            'api/v2/questions/1/answers',
-            data=json.dumps({'body': ''}),
-            content_type='application/json'
-        )
-        self.assertIn('Provide an answer', str(answer.data))
 
-    def test_fetch_anaswers_for_a_question(self):
+
+    """def test_fetch_answers_for_a_question(self):
         '''check if answers for a question can be retrieved'''
-        self.ask_question()
+        r = self.client.post(self.SIGNUP_URL, data=json.dumps(
+            self.signup_user), content_type='application/json')
+        data_ = json.loads(r.data.decode())
+        res = self.client.post(
+            'api/v2/questions',
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
+            data=json.dumps(self.question),
+            content_type='application/json')
         self.client.post(
             '/api/v2/questions/1/answers',
             data=json.dumps(self.answer),
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
             content_type='application/json'
         )
         res = self.client.get('api/v2/questions/1/answers',
@@ -94,4 +88,4 @@ class TestAnswer(Testbase):
 
 
 if __name__ == ('__maain__'):
-    unittest.main()
+    unittest.main()"""
