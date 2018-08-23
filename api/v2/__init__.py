@@ -6,6 +6,7 @@ main config  file
 from flask_api import FlaskAPI
 from api.v2.config import CONFIG
 from api.v2.manage import DBSetup
+from flask_cors import CORS
 
 CONN = DBSetup()
 
@@ -13,6 +14,7 @@ CONN = DBSetup()
 def create_app(config):
     ''' function that receives configaration and creates the app'''
     app = FlaskAPI(__name__)
+    CORS(app)
     app.config.from_object(CONFIG[config])
     app.url_map.strict_slashes = False
     from api.v2.answer.views import answer_blueprint
