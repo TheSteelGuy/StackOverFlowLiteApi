@@ -141,7 +141,7 @@ The app purely uses python data structures hence no persistance, however another
 
 #### **Run the app**
    ```
-    (myenv)$ python run.py
+    (myenv)$ python runv2.py
    ```
 #### **Run Tests**
   ```
