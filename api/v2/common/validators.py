@@ -13,14 +13,25 @@ def does_object_exist(column=None, table=None, col_name=None, param=None):
         return list_
     return False
 
-
-def select_all(table, column, param):
-    query = 'SELECT * FROM {} WHERE {} =%s'.format(table, column)
-    cursor.execute(query, param)
-    list_ = cursor.fetchall()
-    if list_:
-        return list_
+def does_list_exist(list_, object_key, object_attr):
+    ''' find out if an object exist'''
+    object_list = list(
+        filter(
+            lambda object_dict: object_dict[object_key] == object_attr,
+            list_))
+    if object_list:
+        return object_list
     return False
+
+def db_ptimizer():
+        query = 'SELECT questions.qid, questions.title as question_title, questions.body AS question\
+        ,questions.post_date AS asked_on, answers.description AS answer,\
+        answers.votes AS answer_votes,answers.answer_date AS answered_on from questions LEFT JOIN \
+        answers ON questions.qid=answers.questionId;'
+        cur = CONN.cursor()
+        cur.execute(query)
+        records = cur.fetchall()
+        return records
 
 
 def question_quality(string1="", string2=""):

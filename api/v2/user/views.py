@@ -6,7 +6,8 @@ from flask.views import MethodView
 from werkzeug.security import check_password_hash
 # local imports
 from api.v2.user.user import User
-from api.v2.common.validators import does_object_exist, select_all
+from api.v2.common.validators import does_object_exist
+from api.v2.common.SQL import select_all
 from api.v2 import CONN
 
 
