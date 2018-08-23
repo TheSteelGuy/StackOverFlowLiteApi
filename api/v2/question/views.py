@@ -3,6 +3,7 @@ from flask import make_response, jsonify, request, Blueprint
 from flask.views import MethodView
 from api.v2.question.question import Question
 from api.v2.common.validators import does_object_exist, question_quality, db_ptimizer, does_list_exist
+from api.v2.common.validators import token_required
 from api.v2.common.SQL import select_no_condition, select_all
 
 
@@ -12,7 +13,8 @@ question_blueprint = Blueprint('question', __name__)
 class Questions(MethodView):
     ''' a class for asking question and fetching questions'''
     @classmethod
-    def post(cls, user_id=1):
+    @token_required
+    def post(cls, user_id):
         ''' method for asking a question'''
         quiz_title = request.json.get('title')
         quiz_body = request.json.get('body')

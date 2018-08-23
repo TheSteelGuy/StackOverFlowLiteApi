@@ -1,10 +1,15 @@
 '''user class'''
 import re
+from datetime import datetime, timedelta
+import jwt
 from werkzeug.security import generate_password_hash
+from flask import current_app
 from api.v2 import CONN
+
 
 class User():
     ''' class user'''
+
     def __init__(self, username, email, password, confirm_pwd):
         self.username = username
         self.email = email
@@ -37,3 +42,66 @@ class User():
             return 'You should not use numbers only as password'
         return True
 
+    @staticmethod
+    def generate_token(user_id):
+        '''method which generates token for users'''
+        try:
+            paylod = {
+                'exp': datetime.utcnow() + timedelta(minutes=1200),
+                'iat': datetime.utcnow(),
+                'sub': user_id
+
+            }
+            encoded_token = jwt.encode(
+                paylod, current_app.config['SECRET_KEY']
+            )
+            return encoded_token
+
+        except Exception as e:
+            string = 'An exception of type {0} occurred. Arguments:\n{1!r}'
+            message = string.format(type(e).__name__, e.args)
+            return message
+
+    @staticmethod
+    def decode_token(token_auth):
+        '''decodes the token'''
+        try:
+            paylod = jwt.decode(
+                token_auth, current_app.config['SECRET_KEY'])
+            token_blacklisted = BlacklistToken.verify_token(token_auth)
+            if token_blacklisted:
+                return 'seems like you have already logged out, login again'
+            return paylod['sub']
+        except jwt.ExpiredSignatureError:
+            return 'token expired, you need to login again'
+        except jwt.InvalidTokenError:
+            return 'this token was altered, its is not authentic'
+
+
+class BlacklistToken():
+    '''blacklist token'''
+
+    def __init__(self, token):
+        '''contructor for token'''
+        self.token = token
+
+    @staticmethod
+    def verify_token(auth_token):
+        '''
+        Checks if the token exist in the database,
+        that is wether it is blacklisted or not.
+        '''
+        query = 'SELECT token FROM tokens WHERE token =%s'
+        cursor = CONN.cursor()
+        cursor.execute(query, (str(auth_token),))
+        blacklisted_token = cursor.fetchone()
+        if blacklisted_token:
+            return True
+        return False
+
+    def save_token(self, token):
+        ''' saves user in the table'''
+        cursor = CONN.cursor()
+        query = 'INSERT INTO tokens (token) VALUES (%s)'
+        cursor.execute(query, (token,))
+        CONN.commit()

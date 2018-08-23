@@ -1,38 +1,14 @@
 '''test auth views'''
-from unittest import TestCase
+import unittest
 import json
-from api.v2 import create_app
-#from api.v2.user import User
-
-
-class Testbase(TestCase):
-    '''test super class'''
-
-    def setUp(self):
-        '''prepare test environment'''
-        self.app = create_app('testing')
-        self.client = self.app.test_client()
-        self.SIGNUP_URL = 'api/v2/auth/signup'
-        self.signup_user = {
-            'username': 'collo',
-            'email': 'myemail@gmail.com',
-            'password': '12345jamesQ@',
-            'confirm_pwd': '12345jamesQ@'
-        }
-        self.login_user = {
-            'username': 'collo',
-            'password': '12345jamesQ@'
-        }
-
-    def tearDown(self):
-        '''drop tables for atomicity of tests'''
+from api.v2.common.base_tests import Testbase
 
 
 class SignUpTests(Testbase):
 
     def test_signup(self):
         signup = self.client.post(
-            self.SIGNUP_URL,
+            'api/v2/auth/signup',
             data=json.dumps(self.signup_user),
             content_type='application/json'
         )
@@ -41,25 +17,23 @@ class SignUpTests(Testbase):
 
     def test_signup_more_than_once_with_same_email(self):
         '''test if a user can signup twice with the same details'''
-        self.client.post(
-            self.SIGNUP_URL,
-            data=json.dumps(self.signup_user),
-            content_type='application/json'
-        )
+        token = self.generate_token()
         response = self.client.post(
-            self.SIGNUP_URL,
+            'api/v2/auth/signup',
             data=json.dumps(self.signup_user),
             content_type='application/json'
         )
         self.assertIn(
-            'A user with that email address already exist', str(response.data))
+            'A user with that email already exist', str(response.data))
+        self.assertIn(
+            'A user with that email already exist', str(response.data))
 
     def test_logout(self):
         ''''tests_user logout'''
         r = self.client.post(self.SIGNUP_URL, data=json.dumps(
             self.signup_user), content_type='application/json')
         data_ = json.loads(r.data.decode())
-        self.assertEqual(data_['message'], 'registration successfull')
+        self.assertEqual(data_['message'], 'Registration successfull')
 
         logout = self.client.post(
             'api/v2/auth/logout',
@@ -70,13 +44,12 @@ class SignUpTests(Testbase):
         )
         self.assertIn('You have successfuly logged out', str(logout.data))
 
-    def test_if_user_can_signin(self):
+    def test_if_user_can_login(self):
         '''tests if a user can log in with correct credentials'''
-        self.client.post(self.SIGNUP_URL, data=json.dumps(self.signup_user), content_type='application/json'
-                         )
+        self.generate_token()
         login = self.client.post(
             'api/v2/auth/login', data=json.dumps(self.login_user), content_type='application/json')
-        self.assertIn('You have succefully logged in', str(login.data))
+        self.assertIn('You have succesfully logged in', str(login.data))
 
     def test_signup_with_unmatching_credentials(self):
         '''tests if a user can signup with wrong credentials'''
@@ -103,7 +76,7 @@ class SignUpTests(Testbase):
         self.assertIn(
             'Ensure you have provide all required details', str(r.data))
 
-    def test_if_user_can_confirm_email(self):
+    """def test_if_user_can_confirm_email(self):
         '''tests if a user can confirm email through links sent to there accounts'''
         signup = self.client.post(self.SIGNUP_URL, data=json.dumps(
             self.signup_user), content_type='application/json')
@@ -121,7 +94,7 @@ class SignUpTests(Testbase):
         auth_token = json.loads(signup.data.decode())['auth_token']
         res = self.client.get('api/v1/auth/confirm/ioghohiuwie.uawouhe.iuah',
                               headers={'Authorization': 'Bearer '+auth_token})
-        self.assertFalse('Your email was verified succefully' in str(res.data))
+        self.assertFalse('Your email was verified succefully' in str(res.data))"""
 
 
 if __name__ == '__main__':
