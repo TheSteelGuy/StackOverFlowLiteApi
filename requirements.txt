@@ -16,8 +16,11 @@ docopt==0.6.2
 enum34==1.1.6
 Flask==1.0.2
 Flask-API==1.0
+Flask-Cors==3.0.6
+Flask-Mail==0.9.1
 Flask-Testing==0.7.1
 funcsigs==1.0.2
+gunicorn==19.8.1
 idna==2.6
 ipaddress==1.0.22
 isort==4.3.4
@@ -30,6 +33,7 @@ MarkupSafe==1.0
 mccabe==0.6.1
 more-itertools==4.2.0
 pluggy==0.6.0
+psycopg2-binary==2.7.5
 py==1.5.3
 pycodestyle==2.4.0
 pycparser==2.18

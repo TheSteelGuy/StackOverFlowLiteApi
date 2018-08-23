@@ -4,7 +4,7 @@ from flask.views import MethodView
 from api.v2.question.question import Question
 from api.v2.common.validators import does_object_exist, question_quality, db_ptimizer, does_list_exist
 from api.v2.common.validators import token_required
-from api.v2.common.SQL import select_no_condition, select_all
+from api.v2.common.SQL import select_no_condition, select_all, delete_
 
 
 question_blueprint = Blueprint('question', __name__)
@@ -40,6 +40,8 @@ class Questions(MethodView):
         return make_response(jsonify({'questions': select_no_condition('questions')})), 200
 
 
+
+
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
     @classmethod
@@ -50,12 +52,24 @@ class FetchQuestion(MethodView):
             question = does_list_exist(QA,'qid', int(questionId))
             if not question:
                 return make_response(jsonify(
-                    {'message': 'The question does not exist, seems like it is deleted'})), 200
+                    {'message': 'The question does not exist, seems like it is deleted'})), 404
             return make_response(jsonify({'question':question})), 200
-        return make_response(jsonify({'message':'Something went wrong, question could not be fetched'})), 500
+        return make_response(jsonify({'message':'The question does not exist, seems like it is deleted'})), 404
+
+    @classmethod
+    @token_required
+    def delete(cls, user_id, questionId):
+        '''deletes question from database'''
+        if not does_object_exist(column='qid', table='questions', col_name='qid', param=questionId):
+            return make_response(jsonify(
+                {'message':'Question does not exist, seems like you have deleted it'})), 409
+        delete_(questionId)
+        return make_response(jsonify(
+            {'message':"Succefully deleted this question"})), 200
+
 
 question_blueprint.add_url_rule(
-    '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET'])
+    '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET', 'DELETE'])
 question_blueprint.add_url_rule(
     '/questions', view_func=Questions.as_view('questions'), methods=['POST','GET'])
 

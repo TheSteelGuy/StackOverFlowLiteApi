@@ -41,3 +41,9 @@ def update_answer(answerId, description):
     cursor.execute(query, answerId)
     CONN.commit()
     return True
+
+def delete_(questionId):
+    '''remove item from db'''
+    query = "DELETE FROM questions WHERE qid ='{}'".format(questionId)
+    cursor.execute(query)
+    CONN.commit()
