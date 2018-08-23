@@ -13,14 +13,15 @@ def create():
                 qid SERIAL PRIMARY KEY,\
                 title VARCHAR(55),\
                 body VARCHAR(255),\
+                post_date TIMESTAMP,\
                 authorId INTEGER REFERENCES users (userId) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS answers (\
                 aId SERIAL PRIMARY KEY,\
-                description VARCHAR(250),\
-                votes INT,\
+                description VARCHAR (250),\
+                votes INTEGER ,\
                 accepted BOOLEAN DEFAULT false,\
-                answer_date TIMESTAMP,\
+                answer_date VARCHAR (20),\
                 questionId INTEGER REFERENCES questions (qId) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS comments (\
