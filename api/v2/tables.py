@@ -18,11 +18,13 @@ def create():
                 )',
         'CREATE TABLE IF NOT EXISTS answers (\
                 aId SERIAL PRIMARY KEY,\
-                description VARCHAR(250),\
-                votes INT DEFAULT 0,\
+                description VARCHAR (250),\
+                votes INTEGER DEFAULT 0,\
                 accepted BOOLEAN DEFAULT false,\
-                answer_date TIMESTAMP,\
-                questionId INTEGER REFERENCES questions (qId) ON DELETE CASCADE\
+                answer_date VARCHAR (100),\
+                questionauthorId INTEGER REFERENCES users (userId) ON DELETE CASCADE,\
+                questionId INTEGER REFERENCES questions (qId) ON DELETE CASCADE,\
+                answerauthorId INTEGER REFERENCES users (userId) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS comments (\
                 cId SERIAL PRIMARY KEY,\
@@ -39,5 +41,3 @@ def create():
     )
         
     return tables_queries
-
-   
