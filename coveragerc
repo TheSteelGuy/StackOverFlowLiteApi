@@ -8,4 +8,6 @@ omit =
 omit =
     venv/*
     */python?.?/*
+    *errors_handler.py
+         
     

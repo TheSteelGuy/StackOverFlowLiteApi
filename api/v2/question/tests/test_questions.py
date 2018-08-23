@@ -66,15 +66,27 @@ class TestQuestion(Testbase):
         res = json.loads(quiz.data.decode())
         self.assertTrue(res['message'] == 'Provide question description')
 
-    """def test_delete_question(self):
+    def test_delete_question(self):
         '''tests to see if deleting post possible'''
-        self.help_ask_question()
+        r = self.client.post(self.SIGNUP_URL, data=json.dumps(
+            self.signup_user), content_type='application/json')
+        self.client.post(
+            '/api/v2/questions',
+            data=json.dumps(self.question),
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
+            content_type='application/json'
+        )
         remove = self.client.delete(
             '/api/v2/questions/1',
+            headers={
+                'Authorization': 'Bearer ' + json.loads(r.data.decode())['auth_token']
+            },
             content_type='application/json'
         )
         res = json.loads(remove.data.decode())
-        self.assertEqual(res['message'], 'Question deleted succefully')"""
+        self.assertEqual(res['message'], 'Succefully deleted this question')
 
 
 if __name__ == '__main__':

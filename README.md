@@ -19,7 +19,7 @@ The app purely uses python data structures hence no persistance, however another
 ## Current endpoints(More to follow)
 
 * #### Ask a question.
-    `POST /api/v1/questions`: 
+    `POST /api/v2/questions`: 
     ```
     headers = {content_type:application/json}
 
@@ -30,21 +30,21 @@ The app purely uses python data structures hence no persistance, however another
     }
     ```
 * #### Fetch all questions.
-    `GET /api/v1/questions`
+    `GET /api/v2/questions`
     ```
     headers = {content_type:application/json}
     ```
 
 
 * #### Fetch a specific question.   
-    `GET /api/v1/questions/<questionId>` 
+    `GET /api/2/questions/<questionId>` 
     ```
     headers = {content_type:application/json} 
     ```
     
 
 * #### Provide an answer to a question.
-    `POST /api/v1/questions/questionId/answers`:
+    `POST /api/v2/questions/questionId/answers`:
     ```
     headers = {content_type:application/json}
 
@@ -54,18 +54,18 @@ The app purely uses python data structures hence no persistance, however another
     ```
 
 * #### Delete a question.
-    `DELETE /api/v1/questions/questionId`:
+    `DELETE /api/v2/questions/questionId`:
     ```
     headers = {content_type:application/json}
 
     ```
 * #### Accept answer as preffered.   
-    `PUT /api/v1/questions/<questionId>/answers/<answerId>` 
+    `PUT /api/v2/questions/<questionId>/answers/<answerId>` 
     ```
     headers = {content_type:application/json} 
     ```
 * #### Upvote/Downvote an answer.   
-    `GET /api/v1/questions/<questionId>/answers/<answerId>/<vote>` 
+    `GET /api/v2/questions/<questionId>/answers/<answerId>/<vote>` 
     ```
     headers = {content_type:application/json} 
 
@@ -75,7 +75,7 @@ The app purely uses python data structures hence no persistance, however another
 
 
 * #### Comment on an answer.   
-    `POST /api/v1/questions/<questionId>/answers/<answerId>/comments` 
+    `POST /api/v2/questions/<questionId>/answers/<answerId>/comments` 
     ```
     headers = {content_type:application/json} 
 
