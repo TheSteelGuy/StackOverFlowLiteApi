@@ -4,7 +4,7 @@
 # StackOverFlowLiteApi
 
 ## Introduction
-* An API for the StackOverFLow hosted  **[```here:```](https://thesteelguy.github.io/StackOverFowLite/)**). front end app.
+* An API for the StackOverFLow hosted  **[```here```](https://thesteelguy.github.io/StackOverFowLite/)**). front end app.
 * StackOverFLowLite a platform where people can ask questions and provide answers. .
 ## NB
 The app purely uses python data structures hence no persistance, however another version will be available fro data persistance
@@ -14,9 +14,39 @@ The app purely uses python data structures hence no persistance, however another
 * **[Flask](flask.pocoo.org/)**  
 
 ## Link to heroku:
-* https://stackoverflowlite.herokuapp.com/
+* https://stackoverflowlitev2.herokuapp.com/
 
 ## Current endpoints(More to follow)
+
+* #### SIgnup.
+    `POST /api/v2/auth/signup`: 
+    ```
+    headers = {content_type:application/json}
+
+    {
+        "username":"username",
+        "email":"someemail@.gmail.com",
+        "password":"collo0",
+        "confirm_pwd":"collo0"
+    }
+
+* #### Login.
+    `POST /api/v2/auth/login`: 
+    ```
+    headers = {content_type:application/json}
+
+    {
+        "email":"someemail@.gmail.com",
+        "password":"collo0"
+
+    }
+
+* #### Login.
+    `POST /api/v2/auth/logout`: 
+    ```
+    headers = {content_type:application/json}
+    ```
+  #### NB all DELETE,POST, PUT apart from signup and login endpoints require tokens
 
 * #### Ask a question.
     `POST /api/v2/questions`: 
