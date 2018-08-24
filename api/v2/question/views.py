@@ -25,6 +25,10 @@ class Questions(MethodView):
         if does_object_exist(column='title', table='questions', col_name='title', param=quiz_title):
             return make_response(jsonify(
                 {'message': 'You have asked this question before'})), 409
+        if does_object_exist(column='body', table='questions', col_name='body', param=quiz_body):
+            return make_response(jsonify(
+                {'message': 'You have asked this question before'})), 409
+        
         quality_check = question_quality(string1=quiz_title, string2=quiz_body)
         if quality_check:
             return make_response(jsonify({'message': quality_check})), 409

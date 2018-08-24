@@ -52,7 +52,7 @@ class UpdateAcceptAnswer(MethodView):
                 update_answer(answerId, answer_body)
                 return make_response(jsonify({'message': 'Answer updated in success'})), 200
         except TypeError:
-            return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+            return make_response(jsonify({'message': 'The answer you are looking for does not exist, type error'})), 404
        
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])
