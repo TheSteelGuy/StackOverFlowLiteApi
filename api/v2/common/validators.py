@@ -52,12 +52,12 @@ def does_list_exist(list_, object_key, object_attr):
     if object_list:
         return object_list
     return False
-
+#join 3 tables
 def db_ptimizer():
-        query = 'SELECT questions.qid, questions.title as question_title, questions.body AS question\
-        ,questions.post_date AS asked_on, answers.description AS answer,\
-        answers.votes AS answer_votes,answers.answer_date AS answered_on from questions LEFT JOIN \
-        answers ON questions.qid=answers.questionId;'
+        query = "SELECT questions.question_id, questions.title as question_title, questions.body AS question\
+        ,questions.post_date AS asked_on, COALESCE(answers.description, 'No answer') AS answer,\
+        COALESCE(answers.votes,'0') AS answer_votes,COALESCE(answers.answer_date,'No date') AS answered_on from questions LEFT JOIN \
+        answers ON questions.question_id=answers.question_id;"
         cur = CONN.cursor()
         cur.execute(query)
         records = cur.fetchall()
@@ -85,5 +85,19 @@ def content_quality(string_, content=None):
         return 'Your {} cannot be numbers only'.format(content)
     if len(string_.split()) < 2:
         return 'Please space your {} properly for readership'.format(content)
+
+def check_user_input(username=None, email=None, pwd=None, confirm_pwd=None):
+    ''' check user details'''
+    if username is None:
+        return 'Provide  username'
+    if email is None:
+        return 'Provide email'
+    if pwd is None:
+        return 'Provide password'
+    if confirm_pwd is None:
+        return 'Provide password confirmation'
+
+
+
 
 

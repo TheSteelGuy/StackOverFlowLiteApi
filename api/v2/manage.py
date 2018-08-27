@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from os import getenv
 from api.v2.tables import create
+from flask import current_app
 
 class DBSetup():
     '''set up database actions'''

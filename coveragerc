@@ -5,9 +5,11 @@ omit =
     */site-packages/nose/*
 
 [report]
+show_missing = True
 omit =
     venv/*
     */python?.?/*
-    *errors_handler.py
+    api/v1/*
+
          
     

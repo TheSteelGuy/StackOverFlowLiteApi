@@ -74,7 +74,7 @@ class SignUpTests(Testbase):
         r = self.client.post(self.SIGNUP_URL, data=json.dumps(
             signup_user), content_type='application/json')
         self.assertIn(
-            'Ensure you have provide all required details', str(r.data))
+            'Provide email', str(r.data))
 
     """def test_if_user_can_confirm_email(self):
         '''tests if a user can confirm email through links sent to there accounts'''

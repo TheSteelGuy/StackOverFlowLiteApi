@@ -2,7 +2,7 @@
 def create():
     tables_queries = (
         'CREATE TABLE IF NOT EXISTS users (\
-                userId SERIAL PRIMARY KEY,\
+                user_id SERIAL PRIMARY KEY,\
                 username VARCHAR(40),\
                 email VARCHAR(64),\
                 confirmed_user BOOLEAN DEFAULT false,\
@@ -10,31 +10,32 @@ def create():
                 )',
     
         'CREATE TABLE IF NOT EXISTS questions (\
-                qid SERIAL PRIMARY KEY,\
+                question_id SERIAL PRIMARY KEY,\
                 title VARCHAR(55),\
                 body VARCHAR(255),\
                 post_date TIMESTAMP,\
-                authorId INTEGER REFERENCES users (userId) ON DELETE CASCADE\
+                author_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS answers (\
-                aId SERIAL PRIMARY KEY,\
+                answer_id SERIAL PRIMARY KEY,\
                 description VARCHAR (250),\
-                votes INTEGER DEFAULT 0,\
+                votes INTEGER,\
                 accepted BOOLEAN DEFAULT false,\
                 answer_date VARCHAR (100),\
-                questionauthorId INTEGER REFERENCES users (userId) ON DELETE CASCADE,\
-                questionId INTEGER REFERENCES questions (qId) ON DELETE CASCADE,\
-                answerauthorId INTEGER REFERENCES users (userId) ON DELETE CASCADE\
+                questionauthor_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE,\
+                question_id INTEGER REFERENCES questions (question_id) ON DELETE CASCADE,\
+                answerauthor_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\
                 )',
         'CREATE TABLE IF NOT EXISTS comments (\
-                cId SERIAL PRIMARY KEY,\
-                description VARCHAR(100),\
+                comment_id SERIAL PRIMARY KEY,\
+                comment VARCHAR(100),\
                 comment_date TIMESTAMP,\
-                answerId INTEGER REFERENCES answers (aId) ON DELETE CASCADE\
+                answer_id INTEGER REFERENCES answers (answer_id) ON DELETE CASCADE,\
+                commentor_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\
                 )',
       
         'CREATE TABLE IF NOT EXISTS tokens (\
-                tId SERIAL PRIMARY KEY,\
+                token_id SERIAL PRIMARY KEY,\
                 token VARCHAR(155)\
                 )'
     

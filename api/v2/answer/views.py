@@ -17,18 +17,21 @@ class AnswerQuestion(MethodView):
         answer_body = request.json.get('answer')
         if not answer_body:
             return make_response(jsonify({'mesage': 'Provide an answer'})), 400
-        quiz_author = does_object_exist(column='authorId', table='questions', col_name='qId', param=questionId)
+        quiz_author = does_object_exist(
+            column='author_id', table='questions', col_name='question_id', param=questionId)
         if not quiz_author:
             return make_response(jsonify(
-                {'message': 'The question does not exist, seems like it is deleted'})), 404
+                {'message': 'The question does not exist'})), 404
         if does_object_exist(column='description', table='answers', col_name='description', param=answer_body):
             return make_response(jsonify(
                 {'message': 'You cannot give the same answer twice'})), 409
         if content_quality(answer_body, content='answer'):
             return make_response(jsonify({'message': content_quality(answer_body, content='answer')})), 409
-        ans = Answer(answer_body, questionId, user_id, quiz_author['authorid'])
+        ans = Answer(answer_body, questionId, user_id,
+                     quiz_author['author_id'])
         ans.save_answer()
         return make_response(jsonify({'message': 'Succesfully answerd the question'})), 201
+
 
 class UpdateAcceptAnswer(MethodView):
     '''accept or update answer class'''
@@ -37,13 +40,13 @@ class UpdateAcceptAnswer(MethodView):
     def put(cls, questionId, answerId, user_id):
         '''accept an answer as your preffered or update answer'''
         try:
-            record = select_all('answers', 'aid', answerId)
-            if record[0]['questionid'] != int(questionId):
+            record = select_all('answers', 'answer_id', answerId)
+            if record[0]['question_id'] != int(questionId):
                 return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
-            if record[0]['questionauthorid'] == user_id:
+            if record[0]['questionauthor_id'] == user_id:
                 return make_response(jsonify(
-                    {'message':accept_answer(answerId)})), 200
-            if record[0]['answerauthorid'] == user_id:
+                    {'message': accept_answer(answerId)})), 200
+            if record[0]['answerauthor_id'] == user_id:
                 answer_body = request.json.get('answer')
                 if not answer_body:
                     return make_response(jsonify({'mesage': 'Provide an answer'})), 400
@@ -52,11 +55,11 @@ class UpdateAcceptAnswer(MethodView):
                 update_answer(answerId, answer_body)
                 return make_response(jsonify({'message': 'Answer updated in success'})), 200
         except TypeError:
-            return make_response(jsonify({'message': 'The answer you are looking for does not exist, type error'})), 404
-       
+            return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+
+
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers/<answerId>',
     view_func=UpdateAcceptAnswer.as_view('accept-update-answer'), methods=['PUT'])
-   

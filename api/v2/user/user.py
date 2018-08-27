@@ -39,8 +39,8 @@ class User():
         if password.isdigit():
             return 'You should not use numbers only as password'
         if password.isalpha():
-            return 'You should not use numbers only as password'
-        return True
+            return 'You should not use letters only as password, or easy to guess password such as your name'
+        
 
     @staticmethod
     def generate_token(user_id):
@@ -70,12 +70,12 @@ class User():
                 token_auth, current_app.config['SECRET_KEY'])
             token_blacklisted = BlacklistToken.verify_token(token_auth)
             if token_blacklisted:
-                return 'seems like you have already logged out, login again'
+                return 'You have already logged out'
             return paylod['sub']
         except jwt.ExpiredSignatureError:
-            return 'token expired, you need to login again'
+            return 'Token expired, you need to login'
         except jwt.InvalidTokenError:
-            return 'this token was altered, its is not authentic'
+            return 'The token is invslid'
 
 
 class BlacklistToken():

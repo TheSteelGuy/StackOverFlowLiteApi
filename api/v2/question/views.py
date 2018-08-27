@@ -4,7 +4,7 @@ from flask.views import MethodView
 from api.v2.question.question import Question
 from api.v2.common.validators import does_object_exist, question_quality, db_ptimizer, does_list_exist
 from api.v2.common.validators import token_required
-from api.v2.common.SQL import select_no_condition, select_all, delete_
+from api.v2.common.SQL import select_no_condition, select_all, delete_, prevent_unauthorized_deletes
 
 
 question_blueprint = Blueprint('question', __name__)
@@ -28,7 +28,7 @@ class Questions(MethodView):
         if does_object_exist(column='body', table='questions', col_name='body', param=quiz_body):
             return make_response(jsonify(
                 {'message': 'You have asked this question before'})), 409
-        
+
         quality_check = question_quality(string1=quiz_title, string2=quiz_body)
         if quality_check:
             return make_response(jsonify({'message': quality_check})), 409
@@ -44,37 +44,36 @@ class Questions(MethodView):
         return make_response(jsonify({'questions': select_no_condition('questions')})), 200
 
 
-
-
 class FetchQuestion(MethodView):
     ''' a class for fetching a single question'''
     @classmethod
     def get(cls, questionId):
         ''' a method for fetching a single question'''
-        QA = db_ptimizer()
-        if QA:
-            question = does_list_exist(QA,'qid', int(questionId))
+        join = db_ptimizer()
+        if join:
+            question = does_list_exist(join, 'question_id', int(questionId))
             if not question:
                 return make_response(jsonify(
-                    {'message': 'The question does not exist, seems like it is deleted'})), 404
-            return make_response(jsonify({'question':question})), 200
-        return make_response(jsonify({'message':'The question does not exist, seems like it is deleted'})), 404
+                    {'message': 'The question does not exist'})), 404
+            return make_response(jsonify({'question': question})), 200
+        return make_response(jsonify({'message': 'The question does not exist'})), 404
 
     @classmethod
     @token_required
     def delete(cls, user_id, questionId):
         '''deletes question from database'''
-        if not does_object_exist(column='qid', table='questions', col_name='qid', param=questionId):
+        if not does_object_exist(column='question_id', table='questions', col_name='question_id', param=questionId):
             return make_response(jsonify(
-                {'message':'Question does not exist, seems like you have deleted it'})), 409
+                {'message': 'Question does not exist'})), 409
+        if prevent_unauthorized_deletes(questionId) != user_id:
+            return make_response(jsonify(
+                {'message': 'You are not authorised to delete this question{},{}'.format(user_id,prevent_unauthorized_deletes(questionId))})), 401
         delete_(questionId)
         return make_response(jsonify(
-            {'message':"Succefully deleted this question"})), 200
+            {'message': "Succefully deleted this question"})), 200
 
 
 question_blueprint.add_url_rule(
     '/questions/<questionId>', view_func=FetchQuestion.as_view('fetch-question'), methods=['GET', 'DELETE'])
 question_blueprint.add_url_rule(
-    '/questions', view_func=Questions.as_view('questions'), methods=['POST','GET'])
-
-
+    '/questions', view_func=Questions.as_view('questions'), methods=['POST', 'GET'])
