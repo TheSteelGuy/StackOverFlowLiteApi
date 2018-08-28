@@ -6,20 +6,27 @@
 ## Introduction
 * An API for the StackOverFLow hosted  **[```here```](https://thesteelguy.github.io/StackOverFowLite/)**). front end app.
 * StackOverFLowLite a platform where people can ask questions and provide answers. .
-## NB
-The app purely uses python data structures hence no persistance, however another version will be available fro data persistance
 
 ## Technologies used & needed.
 * **[Python](https://www.python.org/downloads/)**).
 * **[Flask](flask.pocoo.org/)**  
+* ** Postgress**
+* ** Json web Tokens for authentication**
 
+## Setting up database
+### Install Postgres:
+```
+$ sudo apt-get update
+$ sudo apt-get install postgresql postgresql-contrib
+$ psql -c "CREATE DATABASE sol;" -U postgres
+```
 ## Link to heroku:
 * https://stackoverflowlitev2.herokuapp.com/
 
 ## Current endpoints(More to follow)
 
 * #### SIgnup.
-    `POST /api/v2/auth/signup`: 
+    `POST /api/v2/auth/signup`:
     ```
     headers = {content_type:application/json}
 
@@ -31,25 +38,25 @@ The app purely uses python data structures hence no persistance, however another
     }
 
 * #### Login.
-    `POST /api/v2/auth/login`: 
+    `POST /api/v2/auth/login`:
     ```
     headers = {content_type:application/json}
 
     {
-        "email":"someemail@.gmail.com",
+        "email":"someemail@gmail.com",
         "password":"collo0"
 
     }
 
 * #### Login.
-    `POST /api/v2/auth/logout`: 
+    `POST /api/v2/auth/logout`:
     ```
     headers = {content_type:application/json}
     ```
   #### NB all DELETE,POST, PUT apart from signup and login endpoints require tokens
 
 * #### Ask a question.
-    `POST /api/v2/questions`: 
+    `POST /api/v2/questions`:
     ```
     headers = {content_type:application/json}
 
@@ -67,11 +74,11 @@ The app purely uses python data structures hence no persistance, however another
 
 
 * #### Fetch a specific question.   
-    `GET /api/2/questions/<questionId>` 
+    `GET /api/2/questions/<questionId>`
     ```
-    headers = {content_type:application/json} 
+    headers = {content_type:application/json}
     ```
-    
+
 
 * #### Provide an answer to a question.
     `POST /api/v2/questions/questionId/answers`:
@@ -90,14 +97,14 @@ The app purely uses python data structures hence no persistance, however another
 
     ```
 * #### Accept answer as preffered.   
-    `PUT /api/v2/questions/<questionId>/answers/<answerId>` 
+    `PUT /api/v2/questions/<questionId>/answers/<answerId>`
     ```
-    headers = {content_type:application/json} 
+    headers = {content_type:application/json}
     ```
 * #### Upvote/Downvote an answer.   
-    `GET /api/v2/questions/<questionId>/answers/<answerId>/<vote>` 
+    `GET /api/v2/questions/<questionId>/answers/<answerId>/<vote>`
     ```
-    headers = {content_type:application/json} 
+    headers = {content_type:application/json}
 
     to downvote replace vote with downvote and upvote to upvote an answer
     for example to upvote answer send: `GET /api/v1/questions/<questionId>/answers/<answerId>/upvote
@@ -105,9 +112,9 @@ The app purely uses python data structures hence no persistance, however another
 
 
 * #### Comment on an answer.   
-    `POST /api/v2/questions/<questionId>/answers/<answerId>/comments` 
+    `POST /api/v2/questions/<questionId>/answers/<answerId>/comments`
     ```
-    headers = {content_type:application/json} 
+    headers = {content_type:application/json}
 
     {
         "comment": "comment description here"
@@ -123,7 +130,7 @@ The app purely uses python data structures hence no persistance, however another
     ```
  #### **Create virtual environment & Activate.**
     ```
-    $ virtualenv -p python3 myenv 
+    $ virtualenv -p python3 myenv
     $ source myenv/bin/activate
     ```
  #### **Install Dependancies.**
