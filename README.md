@@ -10,8 +10,8 @@
 ## Technologies used & needed.
 * **[Python](https://www.python.org/downloads/)**).
 * **[Flask](flask.pocoo.org/)**  
-* ** Postgress**
-* ** Json web Tokens for authentication**
+*  Postgress
+* Json web Tokens for authentication
 
 ## Setting up database
 ### Install Postgres:
