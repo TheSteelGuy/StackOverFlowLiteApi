@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, make_response
 from flask.views import MethodView
 from api.v2.answer.answer import Answer
 from api.v2.common.validators import does_object_exist, content_quality, token_required
-from api.v2.common.SQL import select_all, accept_answer, update_answer
+from api.v2.common.SQL import select_all, accept_answer, update_answer, upvote_answer
 
 answer_blueprint = Blueprint('answer', __name__)
 
@@ -58,6 +58,33 @@ class UpdateAcceptAnswer(MethodView):
             return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
 
 
+class VoteAnswer(MethodView):
+    ''' class vote'''
+    @classmethod
+    @token_required
+    def get(cls, questionId, vote, answerId, user_id):
+        ''' upvote or downvote an answer'''
+        question_list = select_all('questions', 'question_id', questionId)
+        answer_list = select_all('answers', 'answer_id', answerId)
+        if vote == 'upvote':
+            count = 1
+            if not answer_list:
+                return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+            if not question_list:
+                return make_response(jsonify({'message': 'The question you are looking for does not exist'})), 404
+            return make_response(jsonify(upvote_answer(str(answerId), count))), 200
+        if vote == 'downvote':
+            count = -1
+            if not answer_list:
+                return make_response(jsonify({'message': 'The answer you are looking for does not exist'})), 404
+            if not question_list:
+                return make_response(jsonify({'message': 'The question you are looking for does not exist'})), 404
+            return make_response(jsonify(upvote_answer(str(answerId), count))), 200
+        return make_response(jsonify({'message': 'You have made an invalid choice,upvote or downvote'})), 409
+
+
+answer_blueprint.add_url_rule(
+    '/questions/<questionId>/answers/<answerId>/<vote>', view_func=VoteAnswer.as_view('vote-answer'), methods=['GET'])
 answer_blueprint.add_url_rule(
     '/questions/<questionId>/answers', view_func=AnswerQuestion.as_view('answer-question'), methods=['POST', 'GET'])
 answer_blueprint.add_url_rule(

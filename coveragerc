@@ -9,7 +9,5 @@ show_missing = True
 omit =
     venv/*
     */python?.?/*
-    api/v1/*
 
-         
     

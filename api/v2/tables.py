@@ -11,7 +11,7 @@ def create():
     
         'CREATE TABLE IF NOT EXISTS questions (\
                 question_id SERIAL PRIMARY KEY,\
-                title VARCHAR(55),\
+                title VARCHAR(255),\
                 body VARCHAR(255),\
                 post_date TIMESTAMP,\
                 author_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\
@@ -19,7 +19,7 @@ def create():
         'CREATE TABLE IF NOT EXISTS answers (\
                 answer_id SERIAL PRIMARY KEY,\
                 description VARCHAR (250),\
-                votes INTEGER,\
+                votes INTEGER DEFAULT 0,\
                 accepted BOOLEAN DEFAULT false,\
                 answer_date VARCHAR (100),\
                 questionauthor_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE,\

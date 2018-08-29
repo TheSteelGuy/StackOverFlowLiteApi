@@ -23,7 +23,6 @@ def select_no_condition(table):
         return list_
     return False
 
-
 def accept_answer(answerId):
     query1 = 'SELECT accepted from answers WHERE answer_id=%s'
     cursor.execute(query1, answerId)
@@ -41,6 +40,13 @@ def update_answer(answerId, description):
     cursor.execute(query, answerId)
     CONN.commit()
     return True
+
+def upvote_answer(answerId, count):
+    query = "UPDATE answers SET votes=(SELECT votes+{} FROM answers WHERE answer_id=%s) RETURNING votes".format(count)
+    cursor.execute(query, answerId)
+    CONN.commit()
+    votes = cursor.fetchone()
+    return votes
 
 def delete_(questionId):
     '''remove item from db'''
