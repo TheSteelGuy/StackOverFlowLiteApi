@@ -27,7 +27,12 @@ class User():
     @classmethod
     def validate_email(cls, email):
         ''' check email pattern'''
-        return bool(re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email))
+        if not bool(re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email)):
+            return False
+        if email.split('@')[1].count('.')>1:
+            return False
+        return True
+
 
     @classmethod
     def pass_strength(cls, password):
@@ -40,7 +45,7 @@ class User():
             return 'You should not use numbers only as password'
         if password.isalpha():
             return 'You should not use letters only as password, or easy to guess password such as your name'
-        
+
 
     @staticmethod
     def generate_token(user_id):
@@ -75,7 +80,7 @@ class User():
         except jwt.ExpiredSignatureError:
             return 'Token expired, you need to login'
         except jwt.InvalidTokenError:
-            return 'The token is invslid'
+            return 'The token is invalid'
 
 
 class BlacklistToken():

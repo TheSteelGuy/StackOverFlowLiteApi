@@ -19,7 +19,7 @@ class Questions(MethodView):
         quiz_title = request.json.get('title')
         quiz_body = request.json.get('body')
         if not quiz_title:
-            return make_response(jsonify({'message': 'Provide question title, or check for spelling errors'})), 400
+            return make_response(jsonify({'message': 'Provide question title'})), 400
         if not quiz_body:
             return make_response(jsonify({'message': 'Provide question description'})), 409
         if does_object_exist(column='title', table='questions', col_name='title', param=quiz_title):
@@ -77,9 +77,9 @@ class UserQuestion(MethodView):
     '''user questions related actions'''
     @classmethod
     @token_required
-    def get(user_id):
+    def get(cls, user_id):
         '''get all question belongin t a specific user'''
-        records = select_all('questions', 'author_id', user_id)
+        records = select_all('questions', 'author_id', str(user_id))
         if not records:
             return make_response(jsonify({'message': 'You have no questions yet'})), 404
         return make_response(jsonify({'questions': records})), 200
@@ -90,4 +90,4 @@ question_blueprint.add_url_rule(
 question_blueprint.add_url_rule(
     '/questions', view_func=Questions.as_view('questions'), methods=['POST', 'GET'])
 question_blueprint.add_url_rule(
-    '/questions', view_func=Questions.as_view('questions'), methods=['GET'])
+    'user/questions', view_func=UserQuestion.as_view('user-questions'), methods=['GET'])

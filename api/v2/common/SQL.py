@@ -65,6 +65,19 @@ def fetch_question_answer():
         return False
     return records
 
+def fetch_question():
+    '''fetch Questions'''
+    query = "SELECT u.username, q.question_id, q.title AS question_title, SUBSTRING(q.body,1,50) AS question_body,\
+    q.post_date, COALESCE(a.votes,'0') as votes FROM users u, questions q, answers a WHERE \
+    u.user_id=q.author_id"
+    cursor.execute(query)
+    records = cursor.fetchchall()
+    if records:
+        return records
+    return False
+
+
+
 def prevent_unauthorized_deletes(questionId):
     query = "SELECT question_id, author_id FROM questions WHERE question_id='{}';".format(questionId)
     cursor.execute(query)

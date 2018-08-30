@@ -29,7 +29,7 @@ class SignUp(MethodView):
             return make_response(jsonify({'message': check_input})), 409
         if not User.validate_email(email):
             return make_response(jsonify(
-                {'message': 'Enter a valid email address, such as abc.@domain.com'}
+                {'message': 'Enter a valid email address.'}
             )), 409
         if password != confirm_pwd:
             return make_response(jsonify(
@@ -58,7 +58,7 @@ class SignIn(MethodView):
     ''' a view class for signin'''
     @classmethod
     def post(cls):
-        '''a postcmethod which allows user to sign in'''
+        '''a post class method which allows user to sign in'''
         email = request.json.get('email')
         password = request.json.get('password')
         if email and password:
@@ -71,7 +71,7 @@ class SignIn(MethodView):
                     token = User.generate_token(row['user_id'])
                     return make_response(jsonify(
                         {'message': 'You have succesfully logged in', 'auth_token': token})), 200
-                return make_response(jsonify({'message': 'Wrong password'})), 401
+                return make_response(jsonify({'message': 'Wrong email or password'})), 401
             except TypeError:
                 return make_response(jsonify({'message': 'That email address does not exist in our records'})), 404
         return make_response(jsonify({'message': 'Ensure you have provide all required details'})), 400
