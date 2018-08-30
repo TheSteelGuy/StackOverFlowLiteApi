@@ -1,0 +1,18 @@
+language: python
+
+python:
+  - "3.5"
+
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
+
+before_script:
+  - psql -c "CREATE DATABASE soltests;" -U postgres
+  - psql -c "CREATE USER soladmin WITH PASSWORD 'sol12';" -U postgres
+
+script: 
+  - py.test --cov=api
+
+after_success:
+- coveralls
