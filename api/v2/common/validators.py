@@ -1,13 +1,16 @@
 ''' file contains common functions'''
 # third party imports
+import re
 from functools import wraps
 from flask import request, jsonify, make_response
 from api.v2 import CONN
 # local imports
 from api.v2.user.user import User
+cursor = CONN.cursor()
+
 
 def token_required(func):
-   
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         '''function that fetches token from header and decodes it'''
@@ -23,15 +26,13 @@ def token_required(func):
                 user_id = user_id
             else:
                 response = {
-                    'message' : user_id
+                    'message': user_id
                 }
                 return make_response(jsonify(response)), 401
         else:
             return False
         return func(user_id=user_id, *args, **kwargs)
     return wrapper
-
-cursor = CONN.cursor()
 
 
 def does_object_exist(column=None, table=None, col_name=None, param=None):
@@ -43,6 +44,7 @@ def does_object_exist(column=None, table=None, col_name=None, param=None):
         return list_
     return False
 
+
 def does_list_exist(list_, object_key, object_attr):
     ''' find out if an object exist'''
     object_list = list(
@@ -52,52 +54,34 @@ def does_list_exist(list_, object_key, object_attr):
     if object_list:
         return object_list
     return False
-#join 3 tables
-def db_ptimizer():
-        query = "SELECT questions.question_id, questions.title as question_title, questions.body AS question\
-        ,questions.post_date AS asked_on, COALESCE(answers.description, 'No answer') AS answer,\
-        COALESCE(answers.votes,'0') AS answer_votes,COALESCE(answers.answer_date,'No date') AS answered_on from questions LEFT JOIN \
-        answers ON questions.question_id=answers.question_id;"
-        cur = CONN.cursor()
-        cur.execute(query)
-        records = cur.fetchall()
-        return records
 
 
 def question_quality(string1="", string2=""):
     '''check the quality of questions sent to the platform'''
-    if len(string1.strip()) < 10:
-        return 'Your question seems to be of low quality, ensure your title makes sense'
-    if len(string1) > len(string2):
-        return 'Ensure your description provides detail,it should not be shorter than title'
+    if len(string1.strip()) < 1:
+        return 'Provide Question title'
     if string1.isdigit() or string2.isdigit():
         return 'Your question cannot have a title with numbers only'
-    if len(string2.split()) < 3:
-        return 'Please space question body properly readership'
-    if len(string1.split()) < 2:
-        return 'Please space question title properly readership'
 
 
 def content_quality(string_, content=None):
-    if len(string_.strip()) < 10:
-        return 'Your {} seems to be of low quality, ensure your it makes sense'.format(content)
+    if len(string_.strip()) < 1:
+        return 'Provide {} body'.format(content)
     if string_.isdigit():
         return 'Your {} cannot be numbers only'.format(content)
-    if len(string_.split()) < 2:
-        return 'Please space your {} properly for readership'.format(content)
+
 
 def check_user_input(username=None, email=None, pwd=None, confirm_pwd=None):
     ''' check user details'''
     if username is None:
         return 'Provide  username'
+    if len(username.strip())<1:
+        return 'Provide username'
+    if len(username.strip())<4:
+        return 'Username should be more than 4 characters long'
     if email is None:
         return 'Provide email'
     if pwd is None:
         return 'Provide password'
     if confirm_pwd is None:
         return 'Provide password confirmation'
-
-
-
-
-

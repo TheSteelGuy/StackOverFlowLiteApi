@@ -23,6 +23,7 @@ def select_no_condition(table):
         return list_
     return False
 
+
 def accept_answer(answerId):
     query1 = 'SELECT accepted from answers WHERE answer_id=%s'
     cursor.execute(query1, answerId)
@@ -36,10 +37,12 @@ def accept_answer(answerId):
 
 
 def update_answer(answerId, description):
-    query = "UPDATE answers SET description='{}' WHERE answer_id=%s;".format(description)
+    query = "UPDATE answers SET description='{}' WHERE answer_id=%s;".format(
+        description)
     cursor.execute(query, answerId)
     CONN.commit()
     return True
+
 
 def upvote_answer(answerId, count):
     query = "UPDATE answers SET votes=(SELECT votes+{} FROM answers WHERE answer_id=%s) RETURNING votes".format(count)
@@ -48,25 +51,52 @@ def upvote_answer(answerId, count):
     votes = cursor.fetchone()
     return votes
 
+
 def delete_(questionId):
     '''remove item from db'''
     query = "DELETE FROM questions WHERE question_id ='{}'".format(questionId)
     cursor.execute(query)
     CONN.commit()
 
-def fetch_question_answer():
+
+def fetch_user_question(id):
     '''inner joining users and question tables'''
-    query = "SELECT u.user_id,u.username AS posted_by, q.question_id, q.title AS question_title, SUBSTRING(q.body,1,20) AS question_body,\
-    q.post_date, COALESCE(a.votes,'0') as votes FROM users u, questions q, answers a WHERE \
-    u.user_id=q.author_id AND a.question_id=q.question_id;"
+    query = "SELECT u.username AS asked_by, q.question_id, q.title AS question_title,\
+        SUBSTRING(q.body,50) AS question_body,q.post_date FROM users u, questions q WHERE u.user_id=q.author_id\
+        AND u.user_id=(SELECT user_id FROM users WHERE user_id={});".format(id)
     cursor.execute(query)
     records = cursor.fetchall()
     if not records:
         return False
     return records
 
+
+def fetch_questions():
+    '''fetch Questions'''
+    query = "SELECT u.username AS asked_by,q.question_id, q.title AS question_title, SUBSTRING(q.body,1,50)\
+        AS question_body,q.post_date FROM users u,\
+        questions q, answers a WHERE u.user_id=q.author_id"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    if records:
+        return records
+    return False
+
+
+def fetch_question():
+    query = "SELECT questions.question_id, questions.title as question_title, questions.body AS question\
+        ,questions.post_date AS asked_on, COALESCE(answers.description, 'No answer') AS answer,\
+        COALESCE(answers.answer_date,'No date') AS answered_on\
+        from questions LEFT JOIN answers ON questions.question_id=answers.question_id;"
+    cur = CONN.cursor()
+    cur.execute(query)
+    records = cur.fetchall()
+    return records
+
+
 def prevent_unauthorized_deletes(questionId):
-    query = "SELECT question_id, author_id FROM questions WHERE question_id='{}';".format(questionId)
+    query = "SELECT question_id, author_id FROM questions WHERE question_id='{}';".format(
+        questionId)
     cursor.execute(query)
     record = cursor.fetchone()
     if record:
