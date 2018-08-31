@@ -13,8 +13,8 @@ class Development(BaseConfig):
     DEBUG = True
     TESTING = True
     os.environ['DB_NAME'] = 'sol'
-    os.environ['DB_USER'] = 'collo'
-    os.environ['DB_PASSWORD'] = 'collo'
+    os.environ['DB_USER'] = 'postgres'
+    os.environ['DB_PASSWORD'] = ''
     os.environ['DB_HOST'] = 'localhost'
 
 
@@ -22,10 +22,10 @@ class Test(BaseConfig):
     '''the class is used to run tests'''
     TESTING = True
     DEBUG = True
-    """os.environ['DB_NAME'] = 'soltests'
+    os.environ['DB_NAME'] = 'soltests'
     os.environ['DB_USER'] = 'soladmin'
     os.environ['DB_PASSWORD'] = 'sol12'
-    os.environ['DB_HOST'] = 'localhost'"""
+    os.environ['DB_HOST'] = 'localhost'
 
 
 class Production(BaseConfig):
