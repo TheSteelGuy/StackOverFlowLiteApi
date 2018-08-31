@@ -74,7 +74,7 @@ def fetch_user_question(id):
 def fetch_questions():
     '''fetch Questions'''
     query = "SELECT u.username AS asked_by,q.question_id, q.title AS question_title, SUBSTRING(q.body,1,50)\
-        AS question_body,q.post_date, COALESCE(a.votes,'0') as votes FROM users u,\
+        AS question_body,q.post_date FROM users u,\
         questions q, answers a WHERE u.user_id=q.author_id"
     cursor.execute(query)
     records = cursor.fetchall()
@@ -86,7 +86,7 @@ def fetch_questions():
 def fetch_question():
     query = "SELECT questions.question_id, questions.title as question_title, questions.body AS question\
         ,questions.post_date AS asked_on, COALESCE(answers.description, 'No answer') AS answer,\
-        COALESCE(answers.votes,'0') AS answer_votes,COALESCE(answers.answer_date,'No date') AS answered_on\
+        COALESCE(answers.answer_date,'No date') AS answered_on\
         from questions LEFT JOIN answers ON questions.question_id=answers.question_id;"
     cur = CONN.cursor()
     cur.execute(query)
