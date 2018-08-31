@@ -1,10 +1,10 @@
 '''views.py'''
 import psycopg2
-# third party imports
+
 from flask import make_response, jsonify, request, Blueprint
 from flask.views import MethodView
 from werkzeug.security import check_password_hash
-# local imports
+
 from api.v2.user.user import User, BlacklistToken
 from api.v2.common.validators import does_object_exist, check_user_input
 from api.v2.common.SQL import select_all
@@ -24,7 +24,8 @@ class SignUp(MethodView):
         email = request.json.get('email')
         password = request.json.get('password')
         confirm_pwd = request.json.get('confirm_pwd')
-        check_input = check_user_input(username=username,email=email, pwd=password, confirm_pwd=confirm_pwd)
+        check_input = check_user_input(
+            username=username, email=email, pwd=password, confirm_pwd=confirm_pwd)
         if check_input:
             return make_response(jsonify({'message': check_input})), 409
         if not User.validate_email(email):

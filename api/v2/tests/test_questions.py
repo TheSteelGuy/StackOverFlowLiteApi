@@ -48,7 +48,7 @@ class TestQuestion(Testbase):
         )
         res = json.loads(quiz.data.decode())
         self.assertEqual(
-            res['message'], 'Provide question title, or check for spelling errors')
+            res['message'], 'Provide question title')
 
     def test_ask_question_with_no_body(self):
         '''tests to see wether posting question with no body is possible'''

@@ -8,6 +8,7 @@ from api.v2 import CONN
 from api.v2.user.user import User
 cursor = CONN.cursor()
 
+
 def token_required(func):
 
     @wraps(func)
@@ -25,13 +26,14 @@ def token_required(func):
                 user_id = user_id
             else:
                 response = {
-                    'message' : user_id
+                    'message': user_id
                 }
                 return make_response(jsonify(response)), 401
         else:
             return False
         return func(user_id=user_id, *args, **kwargs)
     return wrapper
+
 
 def does_object_exist(column=None, table=None, col_name=None, param=None):
     ''' find out if a user exist before adding to db'''
@@ -41,6 +43,7 @@ def does_object_exist(column=None, table=None, col_name=None, param=None):
     if list_:
         return list_
     return False
+
 
 def does_list_exist(list_, object_key, object_attr):
     ''' find out if an object exist'''
@@ -52,16 +55,6 @@ def does_list_exist(list_, object_key, object_attr):
         return object_list
     return False
 
-def db_ptimizer():
-        query = "SELECT questions.question_id, questions.title as question_title, questions.body AS question\
-        ,questions.post_date AS asked_on, COALESCE(answers.description, 'No answer') AS answer,\
-        COALESCE(answers.votes,'0') AS answer_votes,COALESCE(answers.answer_date,'No date') AS answered_on from questions LEFT JOIN \
-        answers ON questions.question_id=answers.question_id;"
-        cur = CONN.cursor()
-        cur.execute(query)
-        records = cur.fetchall()
-        return records
-
 
 def question_quality(string1="", string2=""):
     '''check the quality of questions sent to the platform'''
@@ -71,17 +64,21 @@ def question_quality(string1="", string2=""):
         return 'Your question cannot have a title with numbers only'
 
 
-
 def content_quality(string_, content=None):
-    if len(string_.strip()) < 10:
-        return 'Your {} seems to be of low quality, ensure your it makes sense'.format(content)
+    if len(string_.strip()) < 1:
+        return 'Provide {} body'.format(content)
     if string_.isdigit():
         return 'Your {} cannot be numbers only'.format(content)
+
 
 def check_user_input(username=None, email=None, pwd=None, confirm_pwd=None):
     ''' check user details'''
     if username is None:
         return 'Provide  username'
+    if len(username.strip())<1:
+        return 'Provide username'
+    if len(username.strip())<4:
+        return 'Username should be more than 4 characters long'
     if email is None:
         return 'Provide email'
     if pwd is None:
