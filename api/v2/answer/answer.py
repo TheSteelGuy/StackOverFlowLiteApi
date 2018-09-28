@@ -17,9 +17,11 @@ class Answer():
     def save_answer(self):
         ''' saves answer in the answers table'''
         cursor = CONN.cursor()
-        query = 'INSERT INTO answers (description, answer_date,questionauthor_id,question_id,answerauthor_id)\
-         VALUES(%s,%s,%s,%s,%s)'
+        query = "INSERT INTO answers (description, answer_date,questionauthor_id,question_id,answerauthor_id)\
+         VALUES(%s,%s,%s,%s,%s) RETURNING description, answer_date, (SELECT username FROM users WHERE \
+         user_id='{}')".format(self.authorid)
         cursor.execute(query,
                        (self.answer_body, self.answer_date, self.qestionauthorid, self.questionid, self.authorid))
+        records = cursor.fetchone()
         CONN.commit()
-        return 'done'
+        return records

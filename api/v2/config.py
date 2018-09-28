@@ -1,6 +1,7 @@
 ''' configaration file for various environments such as production or testing'''
 import os
 
+
 class BaseConfig():
     '''parent class subclassed by all other environ ment classes'''
     DEBUG = False

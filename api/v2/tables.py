@@ -12,7 +12,7 @@ def create():
         'CREATE TABLE IF NOT EXISTS questions (\
                 question_id SERIAL PRIMARY KEY,\
                 title VARCHAR(255),\
-                body VARCHAR(255),\
+                body TEXT,\
                 post_date TIMESTAMP,\
                 author_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\
                 )',
@@ -28,7 +28,7 @@ def create():
                 )',
         'CREATE TABLE IF NOT EXISTS comments (\
                 comment_id SERIAL PRIMARY KEY,\
-                comment VARCHAR(100),\
+                comment TEXT,\
                 comment_date TIMESTAMP,\
                 answer_id INTEGER REFERENCES answers (answer_id) ON DELETE CASCADE,\
                 commentor_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE\

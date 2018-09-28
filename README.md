@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi.svg?branch=159922255-ch3-delete-functionality-persist)](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi)
+[![Build Status](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi.svg?branch=develop)](https://travis-ci.org/TheSteelGuy/StackOverFlowLiteApi)
 [![Coverage Status](https://coveralls.io/repos/github/TheSteelGuy/StackOverFlowLiteApi/badge.svg?branch=159922255-ch3-delete-functionality-persist)](https://coveralls.io/github/TheSteelGuy/StackOverFlowLiteApi?branch=159922255-ch3-delete-functionality-persist)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c9337d2239165a70a7db/maintainability)](https://codeclimate.com/github/TheSteelGuy/StackOverFlowLiteApi/maintainability)
 # StackOverFlowLiteApi

@@ -56,12 +56,12 @@ def does_list_exist(list_, object_key, object_attr):
     return False
 
 
-def question_quality(string1="", string2=""):
+def question_quality(string1, string2):
     '''check the quality of questions sent to the platform'''
     if len(string1.strip()) < 1:
-        return 'Provide Question title'
+        return 'Title cannot be empty'
     if string1.isdigit() or string2.isdigit():
-        return 'Your question cannot have a title with numbers only'
+        return 'Question cannot be numbers only'
 
 
 def content_quality(string_, content=None):

@@ -6,7 +6,7 @@ from api.v2.question.question import Question
 from api.v2.common.validators import does_object_exist, question_quality, does_list_exist
 from api.v2.common.validators import token_required, content_quality
 from api.v2.common.SQL import select_no_condition, select_all, delete_, prevent_unauthorized_deletes
-from api.v2.common.SQL import fetch_question, fetch_questions, fetch_user_question
+from api.v2.common.SQL import fetch_question, fetch_questions, fetch_user_question, fetch_user_answer, answer_comments
 
 question_blueprint = Blueprint('question', __name__)
 
@@ -23,9 +23,6 @@ class Questions(MethodView):
             return make_response(jsonify({'message': 'Provide question title'})), 400
         if not quiz_body:
             return make_response(jsonify({'message': 'Provide question description'})), 409
-        if does_object_exist(column='title', table='questions', col_name='title', param=quiz_title):
-            return make_response(jsonify(
-                {'message': 'Similar question exist'})), 409
         if does_object_exist(column='body', table='questions', col_name='body', param=quiz_body):
             return make_response(jsonify(
                 {'message': 'Similar question exist'})), 409
@@ -34,8 +31,8 @@ class Questions(MethodView):
         if quality_check:
             return make_response(jsonify({'message': quality_check})), 409
         question = Question(quiz_title, quiz_body, user_id)
-        question.save_question()
-        return make_response(jsonify({'message': 'Succesfully asked a question'})), 201
+        record = question.save_question()
+        return make_response(jsonify({'message': 'Succesfully asked a question', 'record': record})), 201
 
     @classmethod
     def get(cls):
@@ -50,13 +47,17 @@ class FetchQuestion(MethodView):
     @classmethod
     def get(cls, questionId):
         ''' a method for fetching a single question'''
-        join = fetch_question()
-        if join:
-            question = does_list_exist(join, 'question_id', int(questionId))
+        question_list = fetch_question(questionId)
+        answers = answer_comments(questionId)
+        '''if question_list:
+            question = does_list_exist(
+                question_list, 'question_id', int(questionId))
+            answer = does_list_exist(answers, 'question_id', int(questionId))
             if not question:
                 return make_response(jsonify(
-                    {'message': 'The question does not exist'})), 404
-            return make_response(jsonify({'question': question})), 200
+                    {'message': 'The question does not exist'})), 404'''
+        return make_response(jsonify(
+                {'question': question_list, 'answers': answers})), 200
         return make_response(jsonify({'message': 'The question does not exist'})), 404
 
     @classmethod
@@ -81,9 +82,10 @@ class UserQuestion(MethodView):
     def get(cls, user_id):
         '''get all question belongin t a specific user'''
         records = fetch_user_question(user_id)
+        my_answers = fetch_user_answer(user_id)
         if not records:
             return make_response(jsonify({'message': 'You have no questions yet'})), 404
-        return make_response(jsonify({'questions': records})), 200
+        return make_response(jsonify({'questions': records, 'my_answers': my_answers if my_answers else []})), 200
 
 
 question_blueprint.add_url_rule(
